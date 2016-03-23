@@ -1,6 +1,6 @@
 <?php //importacion de librerias ?>
     <meta charset="utf-8">
-    <link href="<?php echo base_url('media/librerias/css/bootstrap.min.css') ?>" rel="stylesheet" id="bootstrap-css">
+    <link href="<?php echo base_url('media/librerias/css/bootstrap.css') ?>" rel="stylesheet" id="bootstrap-css">
     <script src="<?php echo base_url('media/librerias/js/bootstrap.min.js') ?>" type="text/javascript"></script>
 
     <script type="text/javascript" src="<?php echo base_url("media/librerias/jquery/jquery.js") ?>"></script>
