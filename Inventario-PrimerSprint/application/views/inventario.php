@@ -14,8 +14,8 @@ $this->load->view('header');
 
             //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
             //una celda esta en 'selected'
-            var table = $('#Inst').DataTable();
-            $('#Inst tbody').on( 'click', 'tr', function () {
+            var table = $('#Invt').DataTable();
+            $('#Invt tbody').on( 'click', 'tr', function () {
                 if ( $(this).hasClass('selected') ) {
                     $(this).removeClass('selected');
                     $('#button2').attr("disabled", true);
@@ -54,7 +54,6 @@ $this->load->view('header');
     <ul class="nav nav-tabs" >
         <li class="active"><a href='#invt'>Inventario</a></li>
         <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Movimiento Inventario</a></li>
-<!--        <h6>--><?php //echo base_url('index.php/Admin/inventario') ?><!--</h6>-->
     </ul>
 </div>
 
@@ -89,19 +88,32 @@ $this->load->view('header');
         <?php if (isset($inventario['error'])) { ?>
             <h2>Ha ocurrido un error en la base de datos</h2>
         <?php } else {	?>
-            <table id="Inst" class="display" cellspacing="0" width="100%">
+            <table id="Invt" class="display" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Nombre</th>
+                    <th>Código Producto</th>
+                    <th>Nombre producto</th>
+                    <th>Tipo de producto</th>
+                    <th>IVA</th>
+                    <th>Imagen</th>
+                    <th>Valor compra + IVA</th>
+                    <th>Valor venta + IVA</th>
+                    <th>Cantidad</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php //se recorre el arreglo por medio de un foreach y se accede a el como un objeto ?>
                 <?php foreach ($inventario as $key) { ?>
                     <tr>
-                        <td><?php echo $key->id_prov; ?></td>
-                        <td><?php echo $key->nombre_prov; ?></td>
+                        <td><?php echo $key->id_inv; ?></td>
+                        <td><?php echo $key->cod_pro_inv; ?></td>
+                        <td><?php echo $key->nombre_inv; ?></td>
+                        <td><?php echo $key->tipo_producto_inv; ?></td>
+                        <td><?php echo $key->iva_inv; ?></td>
+                        <td><?php echo 'hola' ?></td>
+                        <td><?php echo $key->id_inv; ?></td>
+                        <td><?php echo $key->cod_pro_inv; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
