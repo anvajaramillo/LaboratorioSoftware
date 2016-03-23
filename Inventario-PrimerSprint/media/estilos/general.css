@@ -4,21 +4,13 @@ th, td{
 
 h1 {
     text-align: center;
-    color:#000000;
+    color:#fa0011;
     font-size: 3em;
     font-style: italic;
     font-weight: bold;
 }
 
 h3 {
-    text-align: center;
-    color:#000000;
-    font-size: 1.5em;
-    font-style: italic;
-    font-weight: bold;
-}
-
-h4 {
     text-align: center;
     color:#fa0011;
     font-size: 1.5em;
@@ -51,3 +43,22 @@ h4 {
     height: 80%;
     margin: 10px auto;
 }
+
+/*.menuAct{*/
+    /*color:#000000;*/
+    /*font-size: 1.0em;*/
+    /*font-style: italic;*/
+/*}*/
+
+/*.menuPas{*/
+    /*color:#fa0011;*/
+    /*font-size: 1.0em;*/
+    /*font-style: italic;*/
+/*}*/
+
+/*.menuPas:hover{*/
+    /*color:#FF9C00;*/
+    /*background:#000000;*/
+    /*font-size: 1.0em;*/
+    /*font-style: italic;*/
+/*}*/
