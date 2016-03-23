@@ -5,7 +5,7 @@ $this->load->view('header');
 <html lang="es">
 <header>
     <title>
-        Instituciones
+        Inventario
     </title>
 
     <script type="text/javascript" class="init">
