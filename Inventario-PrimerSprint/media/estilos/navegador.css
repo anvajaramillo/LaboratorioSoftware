@@ -1,0 +1,26 @@
+
+#navegador ul{
+    list-style-type: none;
+    text-align: left;
+}
+#navegador li{
+    display: inline;
+    text-align: left;
+    margin: 0 10px 0 0;
+}
+#navegador .btn{
+    position:relative;
+    /*padding:8px 16px;*/
+    font-family:'psychotik';
+    font-size:1.2em;
+    font-weight:normal;
+    color:#fff;
+    text-shadow:none;
+    border-radius:5px;
+    background:#fa0011;
+    box-shadow:inset 2px 2px 1px #400106;
+}
+#navegador .btn:hover{
+    background:#FF9C00;
+    box-shadow:inset 2px 2px 1px #995f02;
+}
