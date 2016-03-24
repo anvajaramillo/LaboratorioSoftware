@@ -50,6 +50,7 @@ $this->load->view('header');
 </header>
 <body style="background-color: #f0f0f0;">
 <br>
+
 <div class="container">
     <ul class="nav nav-tabs" >
         <li class="active"><a href='#invt'>Inventario</a></li>
@@ -166,27 +167,57 @@ $this->load->view('header');
                 </form>
             </div>
         </div>
-        <!--
+
         <div id="myModal2" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Editar Institución</h3>
+                <h3 class="modal-title">Editar Movimiento</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php /*echo base_url('index.php/editar/institucion')*/?>" method="post">
+                <form class="form-horizontal" action="<?php /*echo base_url('index.php/editar/movimiento_inventario')*/?>" method="post">
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Nombre</label>
+                        <label class="col-sm-3 control-label">Fecha</label>
                         <div class="col-sm-9">
-                            <input type="text" id="nombre1" name="nombre" value="<?php /*echo set_value('nombre')*/?>" class="form-control">
-                            <?php /*echo form_error('nombre')*/?>
+                            <input type="text" id="e_fecha" name="fecha" value="<?php /*echo set_value('fecha')*/?>" class="form-control">
+                            <?php /*echo form_error('fecha')*/?>
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Ciudad</label>
+                        <label class="col-sm-3 control-label">Proveedor</label>
                         <div class="col-sm-9">
-                            <input type="text" id="ciudad1" name="ciudad" class="form-control">
+                            <input type="text" id="e_proveedor" name="proveedor" class="form-control">
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Producto</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="e_producto" name="producto" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Cantidad</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="e_cantidad" name="cantidad" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Tipo de Movimiento</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="e_to_movimiento" name="to_movimiento" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Descripcion</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="e_descripcion" name="descripcion" class="form-control">
+                        </div>
+                    </div>
+
                     <input type="hidden" id="id1" name="id">
                     <div class="modal-footer" style="text-align: right; position: relative;top:80px">
                         <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
@@ -195,7 +226,7 @@ $this->load->view('header');
                 </form>
             </div>
         </div>
-
+        <!--
         <div id="myModal3" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
