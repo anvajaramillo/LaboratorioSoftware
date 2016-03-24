@@ -33,5 +33,12 @@ class Admin extends CI_Controller
         $this->load->view('movimiento_inventario',$data);
     }
 
+    public function ObtenerRutaImg(){
+        $id_invt=$_POST['id_invt'];
+        $data=$this->Local->getElementWhere('Inventario','ruta_imagen_inv','id_inv', $id_invt);
+        $img='<img src="'.RUTA_SUB.$data[0]->ruta_imagen_inv.'" width="100%" height="100%" title="logo">';
+        echo $img;
+    }
+
 }
 ?>

@@ -10,8 +10,8 @@ $this->load->view('header');
 
     <style>
         .modal-body1{
-            height: 300px;
-            width: 650px;
+            height: 70%;
+            width: 100%;
             overflow-y: auto;
             overflow-x: hidden;
         }

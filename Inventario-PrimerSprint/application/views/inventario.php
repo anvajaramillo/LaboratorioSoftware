@@ -10,54 +10,75 @@ $this->load->view('header');
 
     <style>
         .modal-body1{
-            height: 300px;
-            width: 650px;
+            height: 70%;
+            width: 100%;
             overflow-y: auto;
             overflow-x: hidden;
         }
     </style>
 
-    <script type="text/javascript" class="init">
+<script type="text/javascript" class="init">
 
-        $(document).ready(function() {
+    function logo(){
+        var table = $('#Invt').DataTable();
+        var obj = table.rows('.selected').data();
+        console.log(obj);
+        $.ajax({
+            type:'POST',
+            url : '<?php echo base_url('index.php/Admin/ObtenerRutaImg') ?>',
+            data: {
+                id_invt:obj[0][0],
+            },
+            success : function(body){
+                //alert(body);
+                $('#img').html(body);
+            },
+            error : function(body){
+                alert(body);
+            }
+        });
+        setTimeout(function (){result();},3000);
+    }
 
-            //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
-            //una celda esta en 'selected'
-            var table = $('#Invt').DataTable({
-                "scrollY": "300",
-                "scrollCollapse" : true
-            });
-            $('#Invt tbody').on( 'click', 'tr', function () {
-                if ( $(this).hasClass('selected') ) {
-                    $(this).removeClass('selected');
-                    $('#button2').attr("disabled", true);
-                    $('#button3').attr("disabled", true);
-                }else {
-                    table.$('tr.selected').removeClass('selected');
-                    $(this).addClass('selected');
-                    $('#button2').attr("disabled", false);
-                    $('#button3').attr("disabled", false);
-                }
-            } );
+    $(document).ready(function() {
 
-            $('#button2').click( function () {
-                var obj = table.rows('.selected').data();
-                console.log(obj);
-                document.getElementById('id1').value = obj[0][0];
-                $('#nombre1').attr('value',obj[0][1]);
-                $('#ciudad1').attr('value',obj[0][2]);
-            } );
-
-            $('#button3').click( function () {
-                var obj = table.rows('.selected').data();
-                console.log(obj);
-                document.getElementById('id2').value = obj[0][0];
-                document.getElementById('nombre2').innerHTML = obj[0][1];
-            } );
-
+        //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
+        //una celda esta en 'selected'
+        var table = $('#Invt').DataTable({
+            "scrollY": "300",
+            "scrollCollapse" : true
+        });
+        $('#Invt tbody').on( 'click', 'tr', function () {
+            if ( $(this).hasClass('selected') ) {
+                $(this).removeClass('selected');
+                $('#button2').attr("disabled", true);
+                $('#button3').attr("disabled", true);
+            }else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                $('#button2').attr("disabled", false);
+                $('#button3').attr("disabled", false);
+            }
         } );
 
-    </script>
+        $('#button2').click( function () {
+            var obj = table.rows('.selected').data();
+            console.log(obj);
+            document.getElementById('id1').value = obj[0][0];
+            $('#nombre1').attr('value',obj[0][1]);
+            $('#ciudad1').attr('value',obj[0][2]);
+        } );
+
+        $('#button3').click( function () {
+            var obj = table.rows('.selected').data();
+            console.log(obj);
+            document.getElementById('id2').value = obj[0][0];
+            document.getElementById('nombre2').innerHTML = obj[0][1];
+        } );
+
+    } );
+
+</script>
 
 </header>
 <body style="background-color: #f0f0f0;">
@@ -119,13 +140,14 @@ $this->load->view('header');
                 <?php foreach ($inventario as $key) { ?>
                     <tr>
                         <td><?php echo $key->id_inv; ?></td>
-                        <td><?php echo $key->cod_pro_inv; ?></td>
+                        <td><?php echo $key->cod_prod_inv; ?></td>
                         <td><?php echo $key->nombre_inv; ?></td>
                         <td><?php echo $key->tipo_producto_inv; ?></td>
                         <td><?php echo $key->iva_inv; ?></td>
-                        <td><?php echo 'hola' ?></td>
-                        <td><?php echo $key->id_inv; ?></td>
-                        <td><?php echo $key->cod_pro_inv; ?></td>
+                        <td><a id="ruta" onclick="logo()" href="#imagen"><img src="<?php echo RUTA_SUB.$key->ruta_imagen_inv; ?>" width="25px"; height="40px" title="logo"></a></td>
+                        <td><?php echo $key->valor_compra_con_iva_inv; ?></td>
+                        <td><?php echo $key->valor_venta_con_iva_inv; ?></td>
+                        <td><?php echo $key->cantidad_prod_inv; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
@@ -137,7 +159,7 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Agregar Producto</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/institucion')?>" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/inventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
 
                         <div class="form-group">
@@ -160,17 +182,17 @@ $this->load->view('header');
                             <label class="col-sm-3 control-label">Tipo producto</label>
                             <div class="col-sm-9">
                                 <select  type="text" name="tipo" class="form-control">
-                                    <option value="Aseo">Aseo personal</option>
-                                    <option value="Aseo">Limpieza hogar</option>
-                                    <option value="Aseo">Alimentos congelados</option>
-                                    <option value="Aseo">Comida para animales</option>
-                                    <option value="Aseo">Frutas y verdura</option>
-                                    <option value="Aseo">Carnes</option>
-                                    <option value="Aseo">Confitería</option>
-                                    <option value="Aseo">Bebidas</option>
-                                    <option value="Aseo">Licores</option>
-                                    <option value="Aseo">Granos</option>
-                                    <option value="Aseo">Lacteos y huevos</option>
+                                    <option value="Aseo personal">Aseo personal</option>
+                                    <option value="Limpieza hogar">Limpieza hogar</option>
+                                    <option value="Alimentos congelados">Alimentos congelados</option>
+                                    <option value="Comida para animales">Comida para animales</option>
+                                    <option value="Frutas y verduras">Frutas y verduras</option>
+                                    <option value="Carnes">Carnes</option>
+                                    <option value="Confitería">Confitería</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Licores">Licores</option>
+                                    <option value="Granos">Granos</option>
+                                    <option value="Lacteos y huevos">Lacteos y huevos</option>
                                 </select>
                             </div>
                         </div>
@@ -263,6 +285,13 @@ $this->load->view('header');
                         <input type="submit" class="btn btn-info" name="boton" value="Si">
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <div id="imagen" class="modalmask">
+            <div class="modalbox rotate">
+                <a href="#close" class="close">X</a>
+                <div id="img"></div>
             </div>
         </div>
 
