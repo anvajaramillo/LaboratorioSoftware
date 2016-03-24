@@ -65,8 +65,11 @@ $this->load->view('header');
             var obj = table.rows('.selected').data();
             console.log(obj);
             document.getElementById('id1').value = obj[0][0];
-            $('#nombre1').attr('value',obj[0][1]);
-            $('#ciudad1').attr('value',obj[0][2]);
+            $('#codigo1').attr('value',obj[0][1]);
+            $('#nombre1').attr('value',obj[0][2]);
+            $('#bb').attr('value',obj[0][6]);
+            $('#venta1').attr('value',obj[0][7]);
+            $('#tipo1').val(obj[0][3]);
         } );
 
         $('#button3').click( function () {
@@ -194,6 +197,7 @@ $this->load->view('header');
                                     <option value="Granos">Granos</option>
                                     <option value="Lacteos y huevos">Lacteos y huevos</option>
                                 </select>
+                                <?php echo form_error('tipo'); ?>
                             </div>
                         </div>
 
@@ -243,28 +247,87 @@ $this->load->view('header');
         <div id="myModal2" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Editar Institución</h3>
+                <h3 class="modal-title">Editar Producto</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/editar/institucion')?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/inventario')?>" method="post" enctype="multipart/form-data">
+                    <div class="modal-body1">
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Nombre</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="nombre1" name="nombre1" value="<?php echo set_value('nombre1')?>" class="form-control">
-                            <?php echo form_error('nombre1')?>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Código Producto</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="codigo1" id="codigo1" value="<?php echo set_value('codigo1');?>" class="form-control">
+                                <?php echo form_error('codigo1'); ?>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Ciudad</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="ciudad1" name="ciudad1" class="form-control" value="<?php echo set_value('ciudad1')?>">
-                            <?php echo form_error('ciudad1'); ?>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Nombre producto</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="nombre1" id="nombre1" value="<?php echo set_value('nombre1'); ?>" class="form-control">
+                                <?php echo form_error('nombre1'); ?>
+                            </div>
                         </div>
-                    </div>
-                    <input type="hidden" id="id1" name="id">
-                    <div class="modal-footer" style="text-align: right; position: relative;top:80px">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
-                        <input type="submit" class="btn btn-info" value="Guardar">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Tipo producto</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="tipo1" id="tipo1" class="form-control">
+                                    <option value="Aseo personal">Aseo personal</option>
+                                    <option value="Limpieza hogar">Limpieza hogar</option>
+                                    <option value="Alimentos congelados">Alimentos congelados</option>
+                                    <option value="Comida para animales">Comida para animales</option>
+                                    <option value="Frutas y verduras">Frutas y verduras</option>
+                                    <option value="Carnes">Carnes</option>
+                                    <option value="Confitería">Confitería</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Licores">Licores</option>
+                                    <option value="Granos">Granos</option>
+                                    <option value="Lacteos y huevos">Lacteos y huevos</option>
+                                </select>
+                                <?php echo form_error('tipo1'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">IVA</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="iva1" readonly="true" value="0.16" class="form-control">
+                                <?php echo form_error('iva1'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Imagen</label>
+                            <div class="col-sm-9">
+                                <input type="file" name="img1" value="<?php echo set_value('img1'); ?>">
+                                <label style="font-size: 0.8em;">Solo imagenes PNG y JPG</label>
+                                <?php echo form_error('img1'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Valor unitario compra con IVA</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="compra1" id="bb" value="<?php echo set_value('compra1'); ?>" class="form-control">
+                                <?php echo form_error('compra1'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Valor unitario venta con IVA</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="venta1" id="venta1" value="<?php echo set_value('venta1'); ?>" class="form-control">
+                                <?php echo form_error('venta1'); ?>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="id1" name="id1">
+
+                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
+                            <input type="submit" class="btn btn-info" value="Guardar">
+                        </div>
+
                     </div>
                 </form>
             </div>
