@@ -8,6 +8,15 @@ $this->load->view('header');
         Movimiento de Inventario
     </title>
 
+    <style>
+        .modal-body1{
+            height: 300px;
+            width: 650px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    </style>
+
     <script type="text/javascript" class="init">
 
         $(document).ready(function() {
@@ -108,11 +117,11 @@ $this->load->view('header');
                     <tr>
                         <td><?php echo $key->id_mov; ?></td>
                         <td><?php echo $key->fecha_mov; ?></td>
-                        <td><?php echo $key->; ?></td>
-                        <td><?php echo $key->; ?></td>
+                        <td><?php echo 'hola' ?></td>
+                        <td><?php echo 'hola' ?></td>
                         <td><?php echo $key->cantidad_prod_mov; ?></td>
                         <td><?php echo $key->tipo_movimiento_mov; ?></td>
-                        <td><?php echo $key->; ?></td>
+                        <td><?php echo 'hola' ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
@@ -125,7 +134,7 @@ $this->load->view('header');
                 <h3 class="modal-title">Agregar Producto</h3>
                 <br><br>
                 <form class="form-horizontal" action="<?php /*echo base_url('index.php/crear/movimiento_inventario')*/?>" method="post">
-
+                    <div class="modal-body1">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Fecha</label>
                         <div class="col-sm-9">
@@ -173,7 +182,7 @@ $this->load->view('header');
                         <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
                         <input type="submit" class="btn btn-info" value="Guardar">
                     </div>
-
+                    </div>
                 </form>
             </div>
         </div>
