@@ -87,22 +87,32 @@ $this->load->view('header');
             </div>
         <?php } ?>
 
-        <?php if (isset($inventario['error'])) { ?>
+        <?php if (isset($movInventario['error'])) { ?>
             <h2>Ha ocurrido un error en la base de datos</h2>
         <?php } else {	?>
             <table id="Inst" class="display" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Proveedor</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Tipo de Movimiento</th>
+                    <th>Descripcion</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php //se recorre el arreglo por medio de un foreach y se accede a el como un objeto ?>
-                <?php foreach ($inventario as $key) { ?>
+                <?php foreach ($movInventario as $key) { ?>
                     <tr>
-                        <td><?php echo $key->id_prov; ?></td>
-                        <td><?php echo $key->nombre_prov; ?></td>
+                        <td><?php echo $key->id_mov; ?></td>
+                        <td><?php echo $key->fecha_mov; ?></td>
+                        <td><?php echo $key->; ?></td>
+                        <td><?php echo $key->; ?></td>
+                        <td><?php echo $key->cantidad_prod_mov; ?></td>
+                        <td><?php echo $key->tipo_movimiento_mov; ?></td>
+                        <td><?php echo $key->; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
