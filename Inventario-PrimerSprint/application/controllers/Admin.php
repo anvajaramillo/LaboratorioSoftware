@@ -36,7 +36,7 @@ class Admin extends CI_Controller
     public function ObtenerRutaImg(){
         $id_invt=$_POST['id_invt'];
         $data=$this->Local->getElementWhere('Inventario','ruta_imagen_inv','id_inv', $id_invt);
-        $img='<img src="'.RUTA_SUB.$data[0]->ruta_imagen_inv.'" width="100%" height="100%" title="logo">';
+        $img='<img src="'.RUTA_SUB.$data[0]->ruta_imagen_inv.'" width="100%" height="100%" title="producto">';
         echo $img;
     }
 
