@@ -249,7 +249,7 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Editar Producto</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/inventario')?>" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/editar/inventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
 
                         <div class="form-group">
