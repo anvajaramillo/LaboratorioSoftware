@@ -90,17 +90,17 @@ $this->load->view('header');
         <?php } else {	?>
             <table id="Invt" class="display" cellspacing="0" width="100%">
                 <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Código Producto</th>
-                    <th>Nombre producto</th>
-                    <th>Tipo de producto</th>
-                    <th>IVA</th>
-                    <th>Imagen</th>
-                    <th>Valor compra + IVA</th>
-                    <th>Valor venta + IVA</th>
-                    <th>Cantidad</th>
-                </tr>
+                    <tr>
+                        <th>Id</th>
+                        <th>Código Producto</th>
+                        <th>Nombre producto</th>
+                        <th>Tipo de producto</th>
+                        <th>IVA</th>
+                        <th>Imagen</th>
+                        <th>Valor compra + IVA</th>
+                        <th>Valor venta + IVA</th>
+                        <th>Cantidad</th>
+                    </tr>
                 </thead>
                 <tbody>
                 <?php //se recorre el arreglo por medio de un foreach y se accede a el como un objeto ?>
