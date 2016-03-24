@@ -53,8 +53,8 @@ $this->load->view('header');
 
 <div class="container">
     <ul class="nav nav-tabs" >
-        <li class="active"><a href='#invt'>Inventario</a></li>
-        <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Movimiento Inventario</a></li>
+        <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Inventario</a></li>
+        <li class="active"><a href='#mov'>Movimiento Inventario</a></li>
         <!--        <h6>--><?php //echo base_url('index.php/Admin/inventario') ?><!--</h6>-->
     </ul>
 </div>
@@ -63,7 +63,7 @@ $this->load->view('header');
 
 <div class="cuerpo container panel-body" id="cuerpo1">
 
-    <div  class="tab-pane active" id="invt">
+    <div  class="tab-pane active" id="movz">
         <div id="navegador">
             <ul>
                 <li><a id="button" href="#myModal1" class="btn">Agregar</a></li>
