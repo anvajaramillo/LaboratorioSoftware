@@ -5,7 +5,7 @@ $this->load->view('header');
 <html lang="es">
 <header>
     <title>
-        Inventario
+        Movimiento de Inventario
     </title>
 
     <script type="text/javascript" class="init">
@@ -14,8 +14,8 @@ $this->load->view('header');
 
             //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
             //una celda esta en 'selected'
-            var table = $('#Invt').DataTable();
-            $('#Invt tbody').on( 'click', 'tr', function () {
+            var table = $('#Inst').DataTable();
+            $('#Inst tbody').on( 'click', 'tr', function () {
                 if ( $(this).hasClass('selected') ) {
                     $(this).removeClass('selected');
                     $('#button2').attr("disabled", true);
@@ -54,6 +54,7 @@ $this->load->view('header');
     <ul class="nav nav-tabs" >
         <li class="active"><a href='#invt'>Inventario</a></li>
         <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Movimiento Inventario</a></li>
+        <!--        <h6>--><?php //echo base_url('index.php/Admin/inventario') ?><!--</h6>-->
     </ul>
 </div>
 
@@ -88,60 +89,72 @@ $this->load->view('header');
         <?php if (isset($inventario['error'])) { ?>
             <h2>Ha ocurrido un error en la base de datos</h2>
         <?php } else {	?>
-            <table id="Invt" class="display" cellspacing="0" width="100%">
+            <table id="Inst" class="display" cellspacing="0" width="100%">
                 <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Código Producto</th>
-                        <th>Nombre producto</th>
-                        <th>Tipo de producto</th>
-                        <th>IVA</th>
-                        <th>Imagen</th>
-                        <th>Valor compra + IVA</th>
-                        <th>Valor venta + IVA</th>
-                        <th>Cantidad</th>
-                    </tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                </tr>
                 </thead>
                 <tbody>
                 <?php //se recorre el arreglo por medio de un foreach y se accede a el como un objeto ?>
                 <?php foreach ($inventario as $key) { ?>
                     <tr>
-                        <td><?php echo $key->id_inv; ?></td>
-                        <td><?php echo $key->cod_pro_inv; ?></td>
-                        <td><?php echo $key->nombre_inv; ?></td>
-                        <td><?php echo $key->tipo_producto_inv; ?></td>
-                        <td><?php echo $key->iva_inv; ?></td>
-                        <td><?php echo 'hola' ?></td>
-                        <td><?php echo $key->id_inv; ?></td>
-                        <td><?php echo $key->cod_pro_inv; ?></td>
+                        <td><?php echo $key->id_prov; ?></td>
+                        <td><?php echo $key->nombre_prov; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
             </table>
         <?php } ?>
 
-       <!-- <div id="myModal1" class="modalmask">
+        <div id="myModal1" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Agregar Institución</h3>
+                <h3 class="modal-title">Agregar Producto</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php /*echo base_url('index.php/crear/institucion')*/?>" method="post">
+                <form class="form-horizontal" action="<?php /*echo base_url('index.php/crear/movimiento_inventario')*/?>" method="post">
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Nombre</label>
+                        <label class="col-sm-3 control-label">Fecha</label>
                         <div class="col-sm-9">
-
-
-                            <input type="text" name="nombre" value="<?php /*echo set_value('nombre');*/?>" class="form-control">
-                            <?php /*echo form_error('nombre'); */?>
-
+                            <input type="text" name="fecha" value="<?php /*echo set_value('fecha');*/?>" class="form-control">
+                            <?php /*echo form_error('fecha'); */?>
                         </div>
-
                     </div>
+
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">Ciudad</label>
+                        <label class="col-sm-3 control-label">Proveedor</label>
                         <div class="col-sm-9">
-                            <input type="text" name="ciudad" class="form-control">
+                            <input type="text" name="proveedor" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Producto</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="producto" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Cantidad</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="cantidad" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Tipo de Movimiento</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="to_movimiento" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Descripcion</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="descripcion" class="form-control">
                         </div>
                     </div>
 
@@ -149,10 +162,11 @@ $this->load->view('header');
                         <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
                         <input type="submit" class="btn btn-info" value="Guardar">
                     </div>
+
                 </form>
             </div>
         </div>
-
+        <!--
         <div id="myModal2" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
