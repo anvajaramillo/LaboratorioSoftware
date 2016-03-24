@@ -61,9 +61,9 @@ class Crear extends CI_Controller
             );
             $sql = $this->Local->add('Inventario', $data);
             if ($sql) {
-                $this->session->set_userdata('success', '<span class="label label-success">El inventario ha sido guardado con éxito</span>');
+                $this->session->set_userdata('success', '<span class="label label-success">El producto ha sido guardado con éxito</span>');
             } else {
-                $this->session->set_userdata('success', '<span class="label label-success">El inventario no pudo ser guardado con éxito</span>');
+                $this->session->set_userdata('success', '<span class="label label-success">El producto no pudo ser guardado con éxito</span>');
             }
             redirect(base_url() . 'index.php/Admin/inventario');
         }

@@ -76,7 +76,7 @@ $this->load->view('header');
             var obj = table.rows('.selected').data();
             console.log(obj);
             document.getElementById('id2').value = obj[0][0];
-            document.getElementById('nombre2').innerHTML = obj[0][1];
+            document.getElementById('nombre2').innerHTML = obj[0][2];
         } );
 
     } );
@@ -336,16 +336,18 @@ $this->load->view('header');
         <div id="myModal3" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Eliminar Institución</h3>
+                <h3 class="modal-title">Eliminar Producto</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/eliminar/institucion')?>" method="post">
-                    <input type="hidden" id="id2" name="id">
-                    <p>Desea eliminar la institución: </p>
-                    <p style="font-weight: bold" id="nombre2"></p>
-                    <br><br>
-                    <div class="modal-footer" style="text-align: right; position: relative;top:80px">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">No</a></button>
-                        <input type="submit" class="btn btn-info" name="boton" value="Si">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/eliminar/inventario')?>" method="post">
+                    <div class="modal-body1">
+                        <input type="hidden" id="id2" name="id2">
+                        <p>Desea eliminar el producto: </p>
+                        <p style="font-weight: bold" id="nombre2"></p>
+                        <br><br>
+                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">No</a></button>
+                            <input type="submit" class="btn btn-info" name="boton" value="Si">
+                        </div>
                     </div>
                 </form>
             </div>

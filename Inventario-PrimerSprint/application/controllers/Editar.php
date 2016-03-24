@@ -74,9 +74,9 @@ class Editar extends CI_Controller
             );
             $sql2 = $this->Local->update('Inventario', $data, 'id_inv',$id);
             if ($sql2) {
-                $this->session->set_userdata('success', '<span class="label label-success">El inventario ha sido actualizado con éxito</span>');
+                $this->session->set_userdata('success', '<span class="label label-success">El producto ha sido actualizado con éxito</span>');
             } else {
-                $this->session->set_userdata('success', '<span class="label label-success">El inventario no pudo ser actualizado con éxito</span>');
+                $this->session->set_userdata('success', '<span class="label label-success">El producto no pudo ser actualizado con éxito</span>');
             }
             redirect(base_url() . 'index.php/Admin/inventario');
         }
