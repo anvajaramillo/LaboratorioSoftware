@@ -53,7 +53,7 @@ $this->load->view('header');
 <div class="container">
     <ul class="nav nav-tabs" >
         <li class="active"><a href='#invt'>Inventario</a></li>
-        <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Movimiento Inventario</a></li>
+        <li><a href='<?php echo base_url('index.php/Admin/movInventario') ?>'>Movimiento Inventario</a></li>
     </ul>
 </div>
 
