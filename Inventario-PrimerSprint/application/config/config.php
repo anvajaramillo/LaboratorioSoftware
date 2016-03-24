@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+define('RUTA','/xampp/htdocs/LaboratorioSoftware/Inventario-PrimerSprint/Subidas/');
+define('RUTA_SUB','http://localhost/LaboratorioSoftware/Inventario-PrimerSprint/Subidas/');
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
