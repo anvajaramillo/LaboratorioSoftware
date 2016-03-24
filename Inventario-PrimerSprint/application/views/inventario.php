@@ -53,7 +53,7 @@ $this->load->view('header');
 <div class="container">
     <ul class="nav nav-tabs" >
         <li class="active"><a href='#invt'>Inventario</a></li>
-        <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Movimiento Inventario</a></li>
+        <li><a href='<?php echo base_url('index.php/Admin/movInventario') ?>'>Movimiento Inventario</a></li>
     </ul>
 </div>
 
@@ -90,17 +90,17 @@ $this->load->view('header');
         <?php } else {	?>
             <table id="Invt" class="display" cellspacing="0" width="100%">
                 <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Código Producto</th>
-                    <th>Nombre producto</th>
-                    <th>Tipo de producto</th>
-                    <th>IVA</th>
-                    <th>Imagen</th>
-                    <th>Valor compra + IVA</th>
-                    <th>Valor venta + IVA</th>
-                    <th>Cantidad</th>
-                </tr>
+                    <tr>
+                        <th>Id</th>
+                        <th>Código Producto</th>
+                        <th>Nombre producto</th>
+                        <th>Tipo de producto</th>
+                        <th>IVA</th>
+                        <th>Imagen</th>
+                        <th>Valor compra + IVA</th>
+                        <th>Valor venta + IVA</th>
+                        <th>Cantidad</th>
+                    </tr>
                 </thead>
                 <tbody>
                 <?php //se recorre el arreglo por medio de un foreach y se accede a el como un objeto ?>
