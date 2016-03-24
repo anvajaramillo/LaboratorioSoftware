@@ -8,13 +8,25 @@ $this->load->view('header');
         Inventario
     </title>
 
+    <style>
+        .modal-body1{
+            height: 300px;
+            width: 650px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    </style>
+
     <script type="text/javascript" class="init">
 
         $(document).ready(function() {
 
             //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
             //una celda esta en 'selected'
-            var table = $('#Invt').DataTable();
+            var table = $('#Invt').DataTable({
+                "scrollY": "300",
+                "scrollCollapse" : true
+            });
             $('#Invt tbody').on( 'click', 'tr', function () {
                 if ( $(this).hasClass('selected') ) {
                     $(this).removeClass('selected');
@@ -120,34 +132,33 @@ $this->load->view('header');
             </table>
         <?php } ?>
 
-       <!-- <div id="myModal1" class="modalmask">
+        <div id="myModal1" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Agregar Institución</h3>
+                <h3 class="modal-title">Agregar Producto</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php /*echo base_url('index.php/crear/institucion')*/?>" method="post">
-
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Nombre</label>
-                        <div class="col-sm-9">
-
-
-                            <input type="text" name="nombre" value="<?php /*echo set_value('nombre');*/?>" class="form-control">
-                            <?php /*echo form_error('nombre'); */?>
-
+                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/institucion')?>" method="post">
+                    <div class="modal-body1">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Código Producto</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="nombre" value="<?php echo set_value('nombre');?>" class="form-control">
+                                <?php echo form_error('nombre'); ?>
+                            </div>
                         </div>
 
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Ciudad</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="ciudad" class="form-control">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Ciudad</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="ciudad" value="<?php echo set_value('ciudad'); ?>" class="form-control">
+                                <?php echo form_error('ciudad'); ?>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="modal-footer" style="text-align: right; position: relative;top:80px">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
-                        <input type="submit" class="btn btn-info" value="Guardar">
+                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
+                            <input type="submit" class="btn btn-info" value="Guardar">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -158,19 +169,20 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Editar Institución</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php /*echo base_url('index.php/editar/institucion')*/?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/editar/institucion')?>" method="post">
 
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Nombre</label>
                         <div class="col-sm-9">
-                            <input type="text" id="nombre1" name="nombre" value="<?php /*echo set_value('nombre')*/?>" class="form-control">
-                            <?php /*echo form_error('nombre')*/?>
+                            <input type="text" id="nombre1" name="nombre1" value="<?php echo set_value('nombre1')?>" class="form-control">
+                            <?php echo form_error('nombre1')?>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Ciudad</label>
                         <div class="col-sm-9">
-                            <input type="text" id="ciudad1" name="ciudad" class="form-control">
+                            <input type="text" id="ciudad1" name="ciudad1" class="form-control" value="<?php echo set_value('ciudad1')?>">
+                            <?php echo form_error('ciudad1'); ?>
                         </div>
                     </div>
                     <input type="hidden" id="id1" name="id">
@@ -187,7 +199,7 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Eliminar Institución</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php /*echo base_url('index.php/eliminar/institucion')*/?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/eliminar/institucion')?>" method="post">
                     <input type="hidden" id="id2" name="id">
                     <p>Desea eliminar la institución: </p>
                     <p style="font-weight: bold" id="nombre2"></p>
@@ -198,7 +210,7 @@ $this->load->view('header');
                     </div>
                 </form>
             </div>
-        </div>-->
+        </div>
 
     </div>
 </div>
