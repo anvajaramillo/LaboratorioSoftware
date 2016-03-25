@@ -24,7 +24,7 @@ $this->load->view('header');
             //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
             //una celda esta en 'selected'
             var table = $('#Mov').DataTable({
-                "scrollY": "300",
+                "scrollY": "230",
                 "scrollCollapse" : true
             });
             $('#Mov tbody').on( 'click', 'tr', function () {
@@ -44,15 +44,8 @@ $this->load->view('header');
                 var obj = table.rows('.selected').data();
                 console.log(obj);
                 document.getElementById('id1').value = obj[0][0];
-                $('#nombre1').attr('value',obj[0][1]);
-                $('#ciudad1').attr('value',obj[0][2]);
-            } );
-
-            $('#button3').click( function () {
-                var obj = table.rows('.selected').data();
-                console.log(obj);
-                document.getElementById('id2').value = obj[0][0];
-                document.getElementById('nombre2').innerHTML = obj[0][1];
+                $('#descripcion1').attr('value',obj[0][7]);
+                $('#proveedor1').val(obj[0][2]);
             } );
 
         } );
@@ -106,10 +99,11 @@ $this->load->view('header');
                 <tr>
                     <th>Id</th>
                     <th>Fecha</th>
+                    <th>Id proveedor</th>
                     <th>Proveedor</th>
                     <th>Producto</th>
                     <th>Cantidad</th>
-                    <th>Tipo de Movimiento</th>
+                    <th>Tipo de movimiento</th>
                     <th>Descripcion</th>
                 </tr>
                 </thead>
@@ -119,6 +113,7 @@ $this->load->view('header');
                     <tr>
                         <td><?php echo $key->id_mov; ?></td>
                         <td><?php echo $key->fecha_mov; ?></td>
+                        <td><?php echo $key->id_prov; ?></td>
                         <td><?php echo $key->nombre_prov; ?></td>
                         <td><?php echo $key->nombre_inv; ?></td>
                         <td><?php echo $key->cantidad_prod_mov; ?></td>
@@ -202,77 +197,39 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Editar Movimiento</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php /*echo base_url('index.php/editar/movimiento_inventario')*/?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/editar/movInventario')?>" method="post" enctype="multipart/form-data">
+                    <div class="modal-body1">
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Fecha</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="e_fecha" name="fecha" value="<?php /*echo set_value('fecha')*/?>" class="form-control">
-                            <?php /*echo form_error('fecha')*/?>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Proveedor</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="proveedor1" id="proveedor1" class="form-control" value="<?php echo set_value('proveedor1') ?>">
+                                    <?php foreach ($proveedores as $key) { ?>
+                                        <option value="<?php echo $key->id_prov ?>"><?php echo $key->nombre_prov; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Proveedor</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="e_proveedor" name="proveedor" class="form-control">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Descripción movimiento</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="descripcion1" id='descripcion1' value="<?php echo set_value('descripcion1'); ?>" class="form-control">
+                                <?php echo form_error('descripcion1'); ?>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Producto</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="e_producto" name="producto" class="form-control">
+                        <input type="hidden" id="id1" name="id1">
+
+                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
+                            <input type="submit" class="btn btn-danger" value="Guardar">
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Cantidad</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="e_cantidad" name="cantidad" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Tipo de Movimiento</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="e_to_movimiento" name="to_movimiento" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Descripcion</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="e_descripcion" name="descripcion" class="form-control">
-                        </div>
-                    </div>
-
-                    <input type="hidden" id="id1" name="id">
-                    <div class="modal-footer" style="text-align: right; position: relative;top:80px">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
-                        <input type="submit" class="btn btn-info" value="Guardar">
                     </div>
                 </form>
             </div>
         </div>
-        <!--
-        <div id="myModal3" class="modalmask">
-            <div class="modalbox rotate">
-                <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Eliminar Institución</h3>
-                <br><br>
-                <form class="form-horizontal" action="<?php /*echo base_url('index.php/eliminar/institucion')*/?>" method="post">
-                    <input type="hidden" id="id2" name="id">
-                    <p>Desea eliminar la institución: </p>
-                    <p style="font-weight: bold" id="nombre2"></p>
-                    <br><br>
-                    <div class="modal-footer" style="text-align: right; position: relative;top:80px">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">No</a></button>
-                        <input type="submit" class="btn btn-info" name="boton" value="Si">
-                    </div>
-                </form>
-            </div>
-        </div>-->
 
     </div>
 </div>

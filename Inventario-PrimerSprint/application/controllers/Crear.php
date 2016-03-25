@@ -75,14 +75,14 @@ class Crear extends CI_Controller
         $this->form_validation->set_rules('producto', 'producto', 'trim|required|numeric');
         $this->form_validation->set_rules('cantidad', 'cantidad', 'trim|required|numeric');
         $this->form_validation->set_rules('tipo', 'tipo de movimiento', 'trim|required|max_length[44]|callback_validate_string');
-        $this->form_validation->set_rules('descripcion', 'descripcion movimiento', 'trim|max_length[44]|callback_validate_string');
+        $this->form_validation->set_rules('descripcion', 'descripcion movimiento', 'trim|max_length[99]|callback_validate_string');
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-error" style="padding:7px; margin:7px 0 -8px 0">
                                                         <a href="#" class="close" data-dismiss="alert">&times;</a>', '
                                                     </div>
                                                     ');
         //si no cumple con las validaciones
         if (!$this->form_validation->run()){
-            $select="id_mov,fecha_mov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov";
+            $select="id_mov,fecha_mov,id_prov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov";
             $condicion1='id_inv = cod_inv_mov';
             $condicion2='id_prov = cod_prov_mov';
             $data['movimiento']=$this->Local->get_register_join3_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2);

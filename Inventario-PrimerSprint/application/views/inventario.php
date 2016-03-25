@@ -45,7 +45,7 @@ $this->load->view('header');
         //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
         //una celda esta en 'selected'
         var table = $('#Invt').DataTable({
-            "scrollY": "300",
+            "scrollY": "230",
             "scrollCollapse" : true
         });
         $('#Invt tbody').on( 'click', 'tr', function () {
@@ -67,7 +67,7 @@ $this->load->view('header');
             document.getElementById('id1').value = obj[0][0];
             $('#codigo1').attr('value',obj[0][1]);
             $('#nombre1').attr('value',obj[0][2]);
-            $('#bb').attr('value',obj[0][6]);
+            $('#compra1').attr('value',obj[0][6]);
             $('#venta1').attr('value',obj[0][7]);
             $('#tipo1').val(obj[0][3]);
         } );
@@ -308,7 +308,7 @@ $this->load->view('header');
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Valor unitario compra con IVA</label>
                             <div class="col-sm-9">
-                                <input type="text" name="compra1" id="bb" value="<?php echo set_value('compra1'); ?>" class="form-control">
+                                <input type="text" name="compra1" id="compra1" value="<?php echo set_value('compra1'); ?>" class="form-control">
                                 <?php echo form_error('compra1'); ?>
                             </div>
                         </div>
