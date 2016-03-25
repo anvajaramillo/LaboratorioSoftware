@@ -133,57 +133,65 @@ $this->load->view('header');
         <div id="myModal1" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Agregar Producto</h3>
+                <h3 class="modal-title">Agregar Movimiento de Inventario</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php /*echo base_url('index.php/crear/movimiento_inventario')*/?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/inventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Fecha</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="fecha" value="<?php /*echo set_value('fecha');*/?>" class="form-control">
-                            <?php /*echo form_error('fecha'); */?>
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Proveedor</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="proveedor" class="form-control">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Proveedor</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="producto" class="form-control">
+                                    <?php foreach ($proveedores as $key) { ?>
+                                        <option value="<?php echo $key->id_prov ?>"><?php echo $key->nombre_prov; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Producto</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="producto" class="form-control">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Producto</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="producto" class="form-control">
+                                    <?php foreach ($inventario as $key) { ?>
+                                        <option value="<?php echo $key->id_inv ?>"><?php echo $key->nombre_inv; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Cantidad</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="cantidad" class="form-control">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Cantidad producto</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="cantidad" value="<?php echo set_value('cantidad'); ?>" class="form-control">
+                                <?php echo form_error('cantidad'); ?>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Tipo de Movimiento</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="to_movimiento" class="form-control">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Tipo movimiento</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="tipo" class="form-control">
+                                    <option value="Ingreso">Ingreso</option>
+                                    <option value="Egreso">Egreso</option>
+                                </select>
+                                <?php echo form_error('tipo'); ?>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Descripcion</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="descripcion" class="form-control">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Descripción movimiento</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="descripcion" value="<?php echo set_value('descripcion'); ?>" class="form-control">
+                                <?php echo form_error('descripcion'); ?>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="modal-footer" style="text-align: right; position: relative;top:80px">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
-                        <input type="submit" class="btn btn-info" value="Guardar">
-                    </div>
+                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
+                            <input type="submit" class="btn btn-danger" value="Guardar">
+                        </div>
+
                     </div>
                 </form>
             </div>
