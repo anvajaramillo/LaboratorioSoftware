@@ -236,7 +236,7 @@ $this->load->view('header');
 
                         <div class="modal-footer" style="text-align: right; position: relative;top:80px">
                             <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
-                            <input type="submit" class="btn btn-info" value="Guardar">
+                            <input type="submit" class="btn btn-danger" value="Guardar">
                         </div>
 
                     </div>
@@ -325,7 +325,7 @@ $this->load->view('header');
 
                         <div class="modal-footer" style="text-align: right; position: relative;top:80px">
                             <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
-                            <input type="submit" class="btn btn-info" value="Guardar">
+                            <input type="submit" class="btn btn-danger" value="Guardar">
                         </div>
 
                     </div>
@@ -346,7 +346,7 @@ $this->load->view('header');
                         <br><br>
                         <div class="modal-footer" style="text-align: right; position: relative;top:80px">
                             <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">No</a></button>
-                            <input type="submit" class="btn btn-info" name="boton" value="Si">
+                            <input type="submit" class="btn btn-danger" name="boton" value="Si">
                         </div>
                     </div>
                 </form>
