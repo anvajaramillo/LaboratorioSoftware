@@ -87,7 +87,7 @@ $this->load->view('header');
         <?php
         if(validation_errors()== TRUE){?>
             <div class="alert alert-danger alert-error" style="padding:7px;  height: 30px">
-                <a href="#" data-dismiss="alert" style="alignment-adjust: central; text-decoration: none; color: gray"><?php echo "Hay un error en el formulario, vuelva a internarlo"; ?> </a>
+                <center><a href="#" data-dismiss="alert" style="alignment-adjust: central; text-decoration: none; color: gray"><?php echo "Hay un error en el formulario, vuelva a internarlo"; ?> </a></center>
             </div>
         <?php } ?>
 
