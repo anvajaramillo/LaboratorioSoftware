@@ -135,13 +135,13 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Agregar Movimiento de Inventario</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/inventario')?>" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/movInventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Proveedor</label>
                             <div class="col-sm-9">
-                                <select  type="text" name="producto" class="form-control">
+                                <select  type="text" name="proveedor" class="form-control">
                                     <?php foreach ($proveedores as $key) { ?>
                                         <option value="<?php echo $key->id_prov ?>"><?php echo $key->nombre_prov; ?></option>
                                     <?php } ?>
