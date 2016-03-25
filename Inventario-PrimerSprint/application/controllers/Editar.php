@@ -32,7 +32,7 @@ class Editar extends CI_Controller
         $this->form_validation->set_rules('nombre1', 'nombre producto', 'trim|required|max_length[44]|callback_validate_string');
         $this->form_validation->set_rules('tipo1', 'tipo producto', 'trim|required|max_length[44]|callback_validate_string');
         $this->form_validation->set_rules('iva1', 'IVA', 'trim|required|decimal');
-        $img = $_FILES["img11"]["name"];
+        $img = $_FILES["img1"]["name"];
         if($img != ""){
             $this->form_validation->set_rules('img1', 'imagen', 'max_length[20]|callback_img_jpgpng');
         }
@@ -79,6 +79,43 @@ class Editar extends CI_Controller
                 $this->session->set_userdata('success', '<span class="label label-danger">El producto no pudo ser actualizado con éxito</span>');
             }
             redirect(base_url() . 'index.php/Admin/inventario');
+        }
+    }
+
+    public function movInventario()
+    {
+        $this->form_validation->set_rules('proveedor1', 'proveedor', 'trim|required|numeric');
+        $this->form_validation->set_rules('descripcion1', 'descripcion movimiento', 'trim|max_length[99]|callback_validate_string');
+        $this->form_validation->set_rules('id1', 'id', 'trim|required|numeric');
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-error" style="padding:7px; margin:7px 0 -8px 0">
+                                                        <a href="#" class="close" data-dismiss="alert">&times;</a>', '
+                                                    </div>
+                                                    ');
+        //si no cumple con las validaciones
+        if (!$this->form_validation->run()){
+            $select="id_mov,fecha_mov,id_prov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov";
+            $condicion1='id_inv = cod_inv_mov';
+            $condicion2='id_prov = cod_prov_mov';
+            $data['movimiento']=$this->Local->get_register_join3_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2);
+            $data['proveedores']=$this->Local->get_register('Proveedores');
+            $data['inventario']=$this->Local->get_register('Inventario');
+            $this->load->view('movimiento_inventario',$data);
+            //si cumple con las validaciones
+        } else{
+            $proveedor = $this->input->post('proveedor1');
+            $descripcion = $this->input->post('descripcion1');
+            $id = $this->input->post('id1');
+            $dataMov = array(
+                'cod_prov_mov' => $proveedor,
+                'descripcion_mov' => $descripcion
+            );
+            $sql1 = $this->Local->update('Movimiento', $dataMov,'id_mov',$id);
+            if ($sql1) {
+                $this->session->set_userdata('success', '<span class="label label-success">El movimiento de inventario ha sido actualizado con éxito</span>');
+            } else {
+                $this->session->set_userdata('success', '<span class="label label-danger">El movimiento de inventario o no pudo ser actualizado con éxito</span>');
+            }
+            redirect(base_url() . 'index.php/Admin/movInventario');
         }
     }
 

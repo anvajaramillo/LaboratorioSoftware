@@ -126,9 +126,9 @@ class Crear extends CI_Controller
             $sql1 = $this->Local->add('Movimiento', $dataMov);
             $sql2 = $this->Local->update('Inventario', $dataInv, 'id_inv',$producto);
             if ($sql1 and $sql2) {
-                $this->session->set_userdata('success', '<span class="label label-success">El producto ha sido guardado con éxito</span>');
+                $this->session->set_userdata('success', '<span class="label label-success">El movimiento de inventario ha sido realizado con éxito</span>');
             } else {
-                $this->session->set_userdata('success', '<span class="label label-danger">El producto no pudo ser guardado con éxito</span>');
+                $this->session->set_userdata('success', '<span class="label label-danger">El movimiento de inventario no pudo ser realizado con éxito</span>');
             }
             redirect(base_url() . 'index.php/Admin/movInventario');
         }
