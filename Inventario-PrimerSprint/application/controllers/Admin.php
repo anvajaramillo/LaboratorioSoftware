@@ -29,7 +29,7 @@ class Admin extends CI_Controller
 
     public function movInventario()
     {
-        $select="id_mov,fecha_mov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov";
+        $select="id_mov,fecha_mov,id_prov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov";
         $condicion1='id_inv = cod_inv_mov';
         $condicion2='id_prov = cod_prov_mov';
         $data['movimiento']=$this->Local->get_register_join3_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2);
