@@ -23,8 +23,11 @@ $this->load->view('header');
 
             //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
             //una celda esta en 'selected'
-            var table = $('#Inst').DataTable();
-            $('#Inst tbody').on( 'click', 'tr', function () {
+            var table = $('#Mov').DataTable({
+                "scrollY": "300",
+                "scrollCollapse" : true
+            });
+            $('#Mov tbody').on( 'click', 'tr', function () {
                 if ( $(this).hasClass('selected') ) {
                     $(this).removeClass('selected');
                     $('#button2').attr("disabled", true);
@@ -77,12 +80,11 @@ $this->load->view('header');
             <ul>
                 <li><a id="button" href="#myModal1" class="btn">Agregar</a></li>
                 <li><a id="button2" href="#myModal2" class="btn" disabled="disable">Editar</a></li>
-                <li><a id="button3" href="#myModal3" class="btn" disabled="disable">Eliminar</a></li>
             </ul>
         </div>
 
         <div style="text-align: center">
-            <h1>Inventario</h1><?php
+            <h1>Movimiento de Inventario</h1><?php
             //mostrar mensaje de almacenamiento satisfactorio o no de la bd
             if(key_exists('success', $this->session->all_userdata())){
                 echo "<h4>".$this->session->userdata('success')."</h4>";
@@ -96,10 +98,10 @@ $this->load->view('header');
             </div>
         <?php } ?>
 
-        <?php if (isset($movInventario['error'])) { ?>
+        <?php if (isset($movimiento['error'])) { ?>
             <h2>Ha ocurrido un error en la base de datos</h2>
         <?php } else {	?>
-            <table id="Inst" class="display" cellspacing="0" width="100%">
+            <table id="Mov" class="display" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th>Id</th>
@@ -113,15 +115,15 @@ $this->load->view('header');
                 </thead>
                 <tbody>
                 <?php //se recorre el arreglo por medio de un foreach y se accede a el como un objeto ?>
-                <?php foreach ($movInventario as $key) { ?>
+                <?php foreach ($movimiento as $key) { ?>
                     <tr>
                         <td><?php echo $key->id_mov; ?></td>
                         <td><?php echo $key->fecha_mov; ?></td>
-                        <td><?php echo 'hola' ?></td>
-                        <td><?php echo 'hola' ?></td>
+                        <td><?php echo $key->nombre_prov; ?></td>
+                        <td><?php echo $key->nombre_inv; ?></td>
                         <td><?php echo $key->cantidad_prod_mov; ?></td>
                         <td><?php echo $key->tipo_movimiento_mov; ?></td>
-                        <td><?php echo 'hola' ?></td>
+                        <td><?php echo $key->descripcion_mov; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
