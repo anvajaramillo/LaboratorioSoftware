@@ -76,7 +76,7 @@ class Editar extends CI_Controller
             if ($sql2) {
                 $this->session->set_userdata('success', '<span class="label label-success">El producto ha sido actualizado con éxito</span>');
             } else {
-                $this->session->set_userdata('success', '<span class="label label-success">El producto no pudo ser actualizado con éxito</span>');
+                $this->session->set_userdata('success', '<span class="label label-danger">El producto no pudo ser actualizado con éxito</span>');
             }
             redirect(base_url() . 'index.php/Admin/inventario');
         }
