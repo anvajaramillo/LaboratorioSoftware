@@ -135,7 +135,8 @@ $this->load->view('header');
                         <th>Imagen</th>
                         <th>Valor compra + IVA</th>
                         <th>Valor venta + IVA</th>
-                        <th>Cantidad</th>
+                        <th>Cantidad Buena</th>
+                        <th>Cantidad Dañada</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -151,6 +152,7 @@ $this->load->view('header');
                         <td><?php echo $key->valor_compra_con_iva_inv; ?></td>
                         <td><?php echo $key->valor_venta_con_iva_inv; ?></td>
                         <td><?php echo $key->cantidad_prod_inv; ?></td>
+                        <td><?php echo $key->cantidad_dan_inv; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
