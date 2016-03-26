@@ -57,7 +57,8 @@ class Crear extends CI_Controller
                 'ruta_imagen_inv' => $ruta_img,
                 'valor_compra_con_iva_inv' => $compra,
                 'valor_venta_con_iva_inv' => $venta,
-                'cantidad_prod_inv' => 0
+                'cantidad_prod_inv' => 0,
+                'cantidad_dan_inv' => 0
             );
             $sql = $this->Local->add('Inventario', $data);
             if ($sql) {
@@ -106,20 +107,22 @@ class Crear extends CI_Controller
                 'descripcion_mov' => $descripcion
             );
 
-            $con=$this->Local->get_register('Inventario');
+            $con=$this->Local->get_register2('Inventario', 'id_inv',$producto);
             if($tipo == 'Ingreso'){
                 $cantidad=$con[0]->cantidad_prod_inv+$cantidad;
                 $dataInv = array(
                     'cantidad_prod_inv' => $cantidad
                 );
             }else{
+                $cantidad_dan=$con[0]->cantidad_dan_inv+$cantidad;
                 $cantidad=$con[0]->cantidad_prod_inv-$cantidad;
                 if($cantidad < 0){
                     $this->session->set_userdata('success', '<span class="label label-danger">Error: Existen menos productos de los que se quieren dar de baja</span>');
                     redirect(base_url() . 'index.php/Admin/movInventario');
                 }else{
                     $dataInv = array(
-                        'cantidad_prod_inv' => $cantidad
+                        'cantidad_prod_inv' => $cantidad,
+                        'cantidad_dan_inv' => $cantidad_dan
                     );
                 }
             }

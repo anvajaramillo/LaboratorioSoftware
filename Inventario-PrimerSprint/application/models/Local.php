@@ -232,5 +232,37 @@ class Local extends CI_Model
         }
     }
 
+    /**
+     * @brief Obtiene registros de varias tablas
+     * @details Produce: SELECT $select FROM $tabla1 JOIN $tabla2 ON condicion1 JOIN $tabla3 ON condicion2;
+     *
+     * @param $select los campos que va a seleccionar
+     * @param $tabla1 especifica la tabla que va a obtener
+     * @param $tabla2 especifica la tabla que va a obtener los registros cruzados
+     * @param $tabla3 especifica la tabla que va a obtener los registros cruzados
+     * @param $condicion1 compara llaves foráneas
+     * @param $condicion2 compara llaves foráneas
+     * @param $where condicional array con dos parametros
+     * @return $query->result() retorna el resultado en una objeto
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function get_register_join3_select_where($select, $tabla1, $tabla2, $condicion1, $tabla3,  $condicion2, $where) {
+        $this->db->protect_identifiers($tabla1);
+        $this->db->protect_identifiers($tabla2);
+        $this->db->protect_identifiers($tabla3);
+        $this->db->select($select);
+        $this->db->from($tabla1);
+        $this->db->join($tabla2, $condicion1);
+        $this->db->join($tabla3, $condicion2);
+        $this->db->where($where);
+        $query = $this->db->get();
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query->result();
+        }
+    }
+
 }
 ?>
