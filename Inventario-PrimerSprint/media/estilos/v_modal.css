@@ -60,7 +60,7 @@
 }
 
 .close {
-    background: #00A2E8;
+    background: #fa0011;
     color: #FFFFFF;
     line-height: 25px;
     position: absolute;
@@ -74,7 +74,7 @@
 }
 
 .close:hover {
-    background: #46c4fa;
+    background: #fa0011;
     color:#000000;
 }
 
