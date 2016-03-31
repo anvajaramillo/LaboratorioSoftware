@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Crear extends CI_Controller
+class Inventario extends CI_Controller
 {
 
     public function __construct()
@@ -20,7 +20,7 @@ class Crear extends CI_Controller
         null;
     }
 
-    public function inventario()
+    public function crearInventario()
     {
         $this->form_validation->set_rules('codigo', 'código producto', 'trim|required|is_natural|is_unique[Inventario.cod_prod_inv]');
         $this->form_validation->set_rules('nombre', 'nombre producto', 'trim|required|max_length[44]|callback_validate_string');
@@ -37,7 +37,7 @@ class Crear extends CI_Controller
         if (!$this->form_validation->run()){
             $data['inventario']=$this->Local->get_register('Inventario');
             $this->load->view('inventario',$data);
-        //si cumple con las validaciones
+            //si cumple con las validaciones
         } else{
             $codigo = $this->input->post('codigo');
             $nombre = $this->input->post('nombre');
@@ -70,70 +70,86 @@ class Crear extends CI_Controller
         }
     }
 
-    public function movInventario()
+    public function editarInventario()
     {
-        $this->form_validation->set_rules('proveedor', 'proveedor', 'trim|required|numeric');
-        $this->form_validation->set_rules('producto', 'producto', 'trim|required|numeric');
-        $this->form_validation->set_rules('cantidad', 'cantidad', 'trim|required|numeric');
-        $this->form_validation->set_rules('tipo', 'tipo de movimiento', 'trim|required|max_length[44]|callback_validate_string');
-        $this->form_validation->set_rules('descripcion', 'descripcion movimiento', 'trim|max_length[99]|callback_validate_string');
+        $sql = $this->Local->getElementWhere('Inventario', "cod_prod_inv", 'id_inv', $this->input->post('id1'));
+        if($sql[0]->cod_prod_inv != $this->input->post('codigo1')){
+            $this->form_validation->set_rules('codigo1', 'código producto', 'trim|required|is_natural|is_unique[Inventario.cod_prod_inv]');
+        }
+        else{
+            $this->form_validation->set_rules('codigo1', 'código producto', 'trim|required|is_natural');
+        }
+        $this->form_validation->set_rules('nombre1', 'nombre producto', 'trim|required|max_length[44]|callback_validate_string');
+        $this->form_validation->set_rules('tipo1', 'tipo producto', 'trim|required|max_length[44]|callback_validate_string');
+        $this->form_validation->set_rules('iva1', 'IVA', 'trim|required|decimal');
+        $img = $_FILES["img1"]["name"];
+        if($img != ""){
+            $this->form_validation->set_rules('img1', 'imagen', 'max_length[20]|callback_img_jpgpng');
+        }
+        $this->form_validation->set_rules('compra1', 'valor unitario compra con IVA', 'trim|required|numeric');
+        $this->form_validation->set_rules('venta1', 'valor unitario venta con IVA', 'trim|required|numeric');
+        $this->form_validation->set_rules('id1', 'id', 'trim|required|numeric');
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-error" style="padding:7px; margin:7px 0 -8px 0">
                                                         <a href="#" class="close" data-dismiss="alert">&times;</a>', '
                                                     </div>
                                                     ');
         //si no cumple con las validaciones
         if (!$this->form_validation->run()){
-            $select="id_mov,fecha_mov,id_prov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov";
-            $condicion1='id_inv = cod_inv_mov';
-            $condicion2='id_prov = cod_prov_mov';
-            $data['movimiento']=$this->Local->get_register_join3_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2);
-            $data['proveedores']=$this->Local->get_register('Proveedores');
             $data['inventario']=$this->Local->get_register('Inventario');
-            $this->load->view('movimiento_inventario',$data);
+            $this->load->view('inventario',$data);
             //si cumple con las validaciones
         } else{
-            $fecha =date("Y-m-d H:i:s");
-            $proveedor = $this->input->post('proveedor');
-            $producto = $this->input->post('producto');
-            $cantidad = $this->input->post('cantidad');
-            $tipo = $this->input->post('tipo');
-            $descripcion = $this->input->post('descripcion');
-            $dataMov = array(
-                'fecha_mov' => $fecha,
-                'cod_prov_mov' => $proveedor,
-                'cod_inv_mov' => $producto,
-                'cantidad_prod_mov' => $cantidad,
-                'tipo_movimiento_mov' => $tipo,
-                'descripcion_mov' => $descripcion
-            );
-
-            $con=$this->Local->get_register2('Inventario', 'id_inv',$producto);
-            if($tipo == 'Ingreso'){
-                $cantidad=$con[0]->cantidad_prod_inv+$cantidad;
-                $dataInv = array(
-                    'cantidad_prod_inv' => $cantidad
-                );
-            }else{
-                $cantidad_dan=$con[0]->cantidad_dan_inv+$cantidad;
-                $cantidad=$con[0]->cantidad_prod_inv-$cantidad;
-                if($cantidad < 0){
-                    $this->session->set_userdata('success', '<span class="label label-danger">Error: Existen menos productos de los que se quieren dar de baja</span>');
-                    redirect(base_url() . 'index.php/Admin/movInventario');
-                }else{
-                    $dataInv = array(
-                        'cantidad_prod_inv' => $cantidad,
-                        'cantidad_dan_inv' => $cantidad_dan
-                    );
-                }
-            }
-            $sql1 = $this->Local->add('Movimiento', $dataMov);
-            $sql2 = $this->Local->update('Inventario', $dataInv, 'id_inv',$producto);
-            if ($sql1 and $sql2) {
-                $this->session->set_userdata('success', '<span class="label label-success">El movimiento de inventario ha sido realizado con éxito</span>');
+            $id = $this->input->post('id1');
+            $codigo = $this->input->post('codigo1');
+            $nombre = $this->input->post('nombre1');
+            $tipo = $this->input->post('tipo1');
+            $img=$_FILES["img1"]["name"];
+            if ($img == "") {
+                $sql1 = $this->Local->getElementWhere('Inventario', 'ruta_imagen_inv', 'id_inv', $id);
+                $ruta_img = $sql1[0]->ruta_imagen_inv;
             } else {
-                $this->session->set_userdata('success', '<span class="label label-danger">El movimiento de inventario no pudo ser realizado con éxito</span>');
+                $ruta_img=RUTA.$codigo."_".$nombre."_".$img;
+                move_uploaded_file($_FILES['img1']['tmp_name'],$ruta_img);
+                $ruta_img=$codigo."_".$nombre."_".$img;
             }
-            redirect(base_url() . 'index.php/Admin/movInventario');
+            $compra = $this->input->post('compra1');
+            $venta = $this->input->post('venta1');
+            $data = array(
+                'cod_prod_inv' => $codigo,
+                'nombre_inv' => $nombre,
+                'tipo_producto_inv' => $tipo,
+                'ruta_imagen_inv' => $ruta_img,
+                'valor_compra_con_iva_inv' => $compra,
+                'valor_venta_con_iva_inv' => $venta,
+            );
+            $sql2 = $this->Local->update('Inventario', $data, 'id_inv',$id);
+            if ($sql2) {
+                $this->session->set_userdata('success', '<span class="label label-success">El producto ha sido actualizado con éxito</span>');
+            } else {
+                $this->session->set_userdata('success', '<span class="label label-danger">El producto no pudo ser actualizado con éxito</span>');
+            }
+            redirect(base_url() . 'index.php/Admin/inventario');
+        }
+    }
+
+    public function eliminarInventario()
+    {
+        $this->form_validation->set_rules('id2', 'id', 'trim|required|numeric');
+        //si no cumple con las validaciones
+        if (!$this->form_validation->run()){
+            $data['inventario']=$this->Local->get_register('Inventario');
+            $this->load->view('inventario',$data);
+            //si cumple con las validaciones
+        } else{
+            $id = $this->input->post('id2');
+            $data = array('id_inv' => $id);
+            $sql = $this->Local->delete('Inventario', $data);
+            if ($sql) {
+                $this->session->set_userdata('success', '<span class="label label-success">El producto ha sido borrado con éxito</span>');
+            } else {
+                $this->session->set_userdata('success', '<span class="label label-success">El producto no pudo ser borrado con éxito</span>');
+            }
+            redirect(base_url() . 'index.php/Admin/inventario');
         }
     }
 
@@ -144,7 +160,7 @@ class Crear extends CI_Controller
             $this->form_validation->set_message('validate_string', 'El campo %s no puede contener símbolos especiales, sólo letras y números');
             return FALSE;
         }
-       // $str =  mysqli_escape_string($str);
+        // $str =  mysqli_escape_string($str);
         return $str;
     }
 

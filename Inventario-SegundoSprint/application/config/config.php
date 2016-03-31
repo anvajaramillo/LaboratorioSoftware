@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-define('RUTA','/xampp/htdocs/LaboratorioSoftware/Inventario-PrimerSprint/Subidas/');
-define('RUTA_SUB','http://localhost/LaboratorioSoftware/Inventario-PrimerSprint/Subidas/');
+define('RUTA','/xampp/htdocs/LaboratorioSoftware/Inventario-SegundoSprint/Subidas/');
+define('RUTA_SUB','http://localhost/LaboratorioSoftware/Inventario-SegundoSprint/Subidas/');
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -24,7 +24,7 @@ define('RUTA_SUB','http://localhost/LaboratorioSoftware/Inventario-PrimerSprint/
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/LaboratorioSoftware/Inventario-PrimerSprint';
+$config['base_url'] = 'http://localhost/LaboratorioSoftware/Inventario-SegundoSprint';
 
 /*
 |--------------------------------------------------------------------------
