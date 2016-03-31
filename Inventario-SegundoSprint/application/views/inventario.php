@@ -45,7 +45,7 @@ $this->load->view('header');
         //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
         //una celda esta en 'selected'
         var table = $('#Invt').DataTable({
-            "scrollY": "230",
+            "scrollY": "210",
             "scrollCollapse" : true
         });
         $('#Invt tbody').on( 'click', 'tr', function () {
@@ -164,7 +164,7 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Agregar Producto</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/inventario')?>" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/inventario/crearInventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
 
                         <div class="form-group">
@@ -251,7 +251,7 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Editar Producto</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/editar/inventario')?>" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/inventario/editarInventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
 
                         <div class="form-group">
@@ -340,7 +340,7 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Eliminar Producto</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/eliminar/inventario')?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/inventario/eliminarInventario')?>" method="post">
                     <div class="modal-body1">
                         <input type="hidden" id="id2" name="id2">
                         <p>Desea eliminar el producto: </p>

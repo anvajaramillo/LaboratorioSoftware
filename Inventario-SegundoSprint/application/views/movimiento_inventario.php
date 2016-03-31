@@ -130,7 +130,7 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Agregar Movimiento de Inventario</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/crear/movInventario')?>" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/movInventario/crearMovInventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
 
                         <div class="form-group">
@@ -197,7 +197,7 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Editar Movimiento</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/editar/movInventario')?>" method="post" enctype="multipart/form-data">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/movInventario/editarMovInventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
 
                         <div class="form-group">
