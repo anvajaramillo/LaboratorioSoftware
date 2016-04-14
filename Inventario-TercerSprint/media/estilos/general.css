@@ -1,0 +1,64 @@
+th, td{
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    color:#fa0011;
+    font-size: 3em;
+    font-style: italic;
+    font-weight: bold;
+}
+
+h3 {
+    text-align: center;
+    color:#fa0011;
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: bold;
+}
+
+#cuerpo{
+    border-radius: 30px 30px 30px 30px;
+    -moz-border-radius: 30px 30px 30px 30px;
+    -webkit-border-radius: 30px 30px 30px 30px;
+    border: 1px solid #fa0011;
+    padding: 50px ;
+    height: 50%;
+    width: 50%;
+    text-align: center;
+    margin: 10px auto;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    position:relative; top:300px
+}
+
+#cuerpo1{
+    border-radius: 30px 30px 30px 30px;
+    -moz-border-radius: 30px 30px 30px 30px;
+    -webkit-border-radius: 30px 30px 30px 30px;
+    border: 1px solid #fa0011;
+    background-color: white;
+    height: 80%;
+    margin: 10px auto;
+}
+
+/*.menuAct{*/
+    /*color:#000000;*/
+    /*font-size: 1.0em;*/
+    /*font-style: italic;*/
+/*}*/
+
+/*.menuPas{*/
+    /*color:#fa0011;*/
+    /*font-size: 1.0em;*/
+    /*font-style: italic;*/
+/*}*/
+
+/*.menuPas:hover{*/
+    /*color:#FF9C00;*/
+    /*background:#000000;*/
+    /*font-size: 1.0em;*/
+    /*font-style: italic;*/
+/*}*/
