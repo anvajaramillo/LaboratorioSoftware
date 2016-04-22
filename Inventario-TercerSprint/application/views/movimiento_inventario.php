@@ -8,15 +8,6 @@ $this->load->view('header');
         Movimiento de Inventario
     </title>
 
-    <style>
-        .modal-body1{
-            height: 70%;
-            width: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-    </style>
-
     <script type="text/javascript" class="init">
 
         $(document).ready(function() {
@@ -60,7 +51,7 @@ $this->load->view('header');
     <ul class="nav nav-tabs" >
         <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Inventario</a></li>
         <li class="active"><a href='#mov'>Movimiento Inventario</a></li>
-        <!--        <h6>--><?php //echo base_url('index.php/Admin/inventario') ?><!--</h6>-->
+        <li><a href='<?php echo base_url('index.php/Admin/clientes') ?>'>Clientes</a></li>
     </ul>
 </div>
 
@@ -68,7 +59,7 @@ $this->load->view('header');
 
 <div class="cuerpo container panel-body" id="cuerpo1">
 
-    <div  class="tab-pane active" id="movz">
+    <div  class="tab-pane active" id="mov">
         <div id="navegador">
             <ul>
                 <li><a id="button" href="#myModal1" class="btn">Agregar</a></li>
