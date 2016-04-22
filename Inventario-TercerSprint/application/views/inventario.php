@@ -8,15 +8,6 @@ $this->load->view('header');
         Inventario
     </title>
 
-    <style>
-        .modal-body1{
-            height: 70%;
-            width: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-    </style>
-
 <script type="text/javascript" class="init">
 
     function logo(){
@@ -90,6 +81,7 @@ $this->load->view('header');
     <ul class="nav nav-tabs" >
         <li class="active"><a href='#invt'>Inventario</a></li>
         <li><a href='<?php echo base_url('index.php/Admin/movInventario') ?>'>Movimiento Inventario</a></li>
+        <li><a href='<?php echo base_url('index.php/Admin/clientes') ?>'>Clientes</a></li>
     </ul>
 </div>
 

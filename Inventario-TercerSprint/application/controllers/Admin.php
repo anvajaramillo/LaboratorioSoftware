@@ -38,6 +38,12 @@ class Admin extends CI_Controller
         $this->load->view('movimiento_inventario',$data);
     }
 
+    public function clientes()
+    {
+        $data['clientes']=$this->Local->get_register('Clientes');
+        $this->load->view('clientes',$data);
+    }
+
     public function ObtenerRutaImg(){
         $id_invt=$_POST['id_invt'];
         $data=$this->Local->getElementWhere('Inventario','ruta_imagen_inv','id_inv', $id_invt);
