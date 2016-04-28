@@ -94,6 +94,29 @@ class Local extends CI_Model
     }
 
     /**
+     * @brief Obtiene un solo registro de la $tabla
+     * @details Priduce: SELECT * FROM $tabla WHERE $condicion1 = '$condicion2' AND $condicion3 = '$condicion4';
+     *
+     * @param $tabla especifica la tabla que va a obtener
+     * @param $condicion1 el campo de la tabla, por lo general es la llave primaria o un campo unico
+     * @param $condicion2 el dato para comparar con el campo de la tabla
+     * @return $query->result() retorna el resultado en una objeto
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function get_register3($tabla, $condicion1, $condicion2, $condicion3, $condicion4){
+        $this->db->protect_identifiers($tabla);
+        $this->db->where($condicion1, $condicion2);
+        $this->db->where($condicion3, $condicion4);
+        $query = $this->db->get($tabla);
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query->result();
+        }
+    }
+
+    /**
      * @brief Actualiza la informacion de la base de datos local
      *
      * @details UPDATE $tabla SET $camposSet WHERE $condicion1 = '$condicion2';
@@ -108,6 +131,31 @@ class Local extends CI_Model
     function update($tabla, $camposSet, $condicion1, $condicion2){
         $this->db->protect_identifiers($tabla);
         $this->db->where($condicion1, $condicion2);
+        $query =  $this->db->update($tabla, $camposSet);
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query;
+        }
+    }
+
+    /**
+     * @brief Actualiza la informacion de la base de datos local
+     *
+     * @details UPDATE $tabla SET $camposSet WHERE $condicion1 = '$condicion2' AND $condicion3 = '$condicion4';
+     *
+     * @param $tabla especifica la tabla que va a actualizar los $datos
+     * @param $camposSet un arreglo de los campos y valores que se van a actualizar
+     * @param $condicion1 el campo de la tabla, por lo general es la llave primaria o un campo unico
+     * @param $condicion2 el dato para comparar con el campo de la tabla
+     * @return $query true la consulta fue exitosa
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function update2($tabla, $camposSet, $condicion1, $condicion2, $condicion3, $condicion4){
+        $this->db->protect_identifiers($tabla);
+        $this->db->where($condicion1, $condicion2);
+        $this->db->where($condicion3, $condicion4);
         $query =  $this->db->update($tabla, $camposSet);
         if(!$query){
             $data['error'] = $this->db->_error_message();
@@ -255,6 +303,38 @@ class Local extends CI_Model
         $this->db->join($tabla2, $condicion1);
         $this->db->join($tabla3, $condicion2);
         $this->db->where($where);
+        $query = $this->db->get();
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query->result();
+        }
+    }
+
+    /**
+     * @brief Obtiene registros de varias tablas
+     * @details Produce: SELECT $select FROM $tabla1 JOIN $tabla2 ON condicion1 JOIN $tabla3 ON condicion2 JOIN $tabla4 ON condicion3;
+     *
+     * @param $select los campos que va a seleccionar
+     * @param $tabla1 especifica la tabla que va a obtener
+     * @param $tabla2 especifica la tabla que va a obtener los registros cruzados
+     * @param $tabla3 especifica la tabla que va a obtener los registros cruzados
+     * @param $condicion1 compara llaves foráneas
+     * @param $condicion2 compara llaves foráneas
+     * @return $query->result() retorna el resultado en una objeto
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function get_register_join4_select($select, $tabla1, $tabla2, $condicion1, $tabla3,  $condicion2, $tabla4, $condicion3) {
+        $this->db->protect_identifiers($tabla1);
+        $this->db->protect_identifiers($tabla2);
+        $this->db->protect_identifiers($tabla3);
+        $this->db->protect_identifiers($tabla4);
+        $this->db->select($select);
+        $this->db->from($tabla1);
+        $this->db->join($tabla2, $condicion1);
+        $this->db->join($tabla3, $condicion2);
+        $this->db->join($tabla4, $condicion3);
         $query = $this->db->get();
         if(!$query){
             $data['error'] = $this->db->_error_message();

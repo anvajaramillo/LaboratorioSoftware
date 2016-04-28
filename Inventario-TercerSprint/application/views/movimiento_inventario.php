@@ -35,8 +35,7 @@ $this->load->view('header');
                 var obj = table.rows('.selected').data();
                 console.log(obj);
                 document.getElementById('id1').value = obj[0][0];
-                $('#descripcion1').attr('value',obj[0][7]);
-                $('#proveedor1').val(obj[0][2]);
+                $('#descripcion1').attr('value',obj[0][6]);
             } );
 
         } );
@@ -90,12 +89,12 @@ $this->load->view('header');
                 <tr>
                     <th>Id</th>
                     <th>Fecha</th>
-                    <th>Id proveedor</th>
                     <th>Proveedor</th>
                     <th>Producto</th>
                     <th>Cantidad</th>
                     <th>Tipo de movimiento</th>
                     <th>Descripcion</th>
+                    <th>Sede</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -104,12 +103,12 @@ $this->load->view('header');
                     <tr>
                         <td><?php echo $key->id_mov; ?></td>
                         <td><?php echo $key->fecha_mov; ?></td>
-                        <td><?php echo $key->id_prov; ?></td>
                         <td><?php echo $key->nombre_prov; ?></td>
                         <td><?php echo $key->nombre_inv; ?></td>
                         <td><?php echo $key->cantidad_prod_mov; ?></td>
                         <td><?php echo $key->tipo_movimiento_mov; ?></td>
                         <td><?php echo $key->descripcion_mov; ?></td>
+                        <td><?php echo $key->nombre_sede; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
@@ -173,6 +172,17 @@ $this->load->view('header');
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Sede</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="sede" class="form-control">
+                                    <?php foreach ($sede as $key) { ?>
+                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="modal-footer" style="text-align: right; position: relative;top:80px">
                             <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
                             <input type="submit" class="btn btn-danger" value="Guardar">
@@ -190,17 +200,6 @@ $this->load->view('header');
                 <br><br>
                 <form class="form-horizontal" action="<?php echo base_url('index.php/movInventario/editarMovInventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Proveedor</label>
-                            <div class="col-sm-9">
-                                <select  type="text" name="proveedor1" id="proveedor1" class="form-control" value="<?php echo set_value('proveedor1') ?>">
-                                    <?php foreach ($proveedores as $key) { ?>
-                                        <option value="<?php echo $key->id_prov ?>"><?php echo $key->nombre_prov; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Descripción movimiento</label>

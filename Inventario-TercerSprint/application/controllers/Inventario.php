@@ -29,13 +29,15 @@ class Inventario extends CI_Controller
         $this->form_validation->set_rules('img', 'imagen', 'max_length[20]|callback_img_jpgpng');
         $this->form_validation->set_rules('compra', 'valor unitario compra con IVA', 'trim|required|numeric');
         $this->form_validation->set_rules('venta', 'valor unitario venta con IVA', 'trim|required|numeric');
+        $this->form_validation->set_rules('sede', 'sede', 'trim|required|numeric');
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-error" style="padding:7px; margin:7px 0 -8px 0">
                                                         <a href="#" class="close" data-dismiss="alert">&times;</a>', '
                                                     </div>
                                                     ');
         //si no cumple con las validaciones
         if (!$this->form_validation->run()){
-            $data['inventario']=$this->Local->get_register('Inventario');
+            $data['inventario']=$this->Local->get_register_join2('Inventario','Sedes','cod_sede_inv = id_sede');
+            $data['sede']=$this->Local->get_register('Sedes');
             $this->load->view('inventario',$data);
             //si cumple con las validaciones
         } else{
@@ -49,6 +51,7 @@ class Inventario extends CI_Controller
             $ruta_img=$codigo."_".$nombre."_".$img;
             $compra = $this->input->post('compra');
             $venta = $this->input->post('venta');
+            $sede = $this->input->post('sede');
             $data = array(
                 'cod_prod_inv' => $codigo,
                 'nombre_inv' => $nombre,
@@ -58,7 +61,8 @@ class Inventario extends CI_Controller
                 'valor_compra_con_iva_inv' => $compra,
                 'valor_venta_con_iva_inv' => $venta,
                 'cantidad_prod_inv' => 0,
-                'cantidad_dan_inv' => 0
+                'cantidad_dan_inv' => 0,
+                'cod_sede_inv' => $sede
             );
             $sql = $this->Local->add('Inventario', $data);
             if ($sql) {
@@ -88,6 +92,7 @@ class Inventario extends CI_Controller
         }
         $this->form_validation->set_rules('compra1', 'valor unitario compra con IVA', 'trim|required|numeric');
         $this->form_validation->set_rules('venta1', 'valor unitario venta con IVA', 'trim|required|numeric');
+        $this->form_validation->set_rules('sede1', 'sede', 'trim|required|numeric');
         $this->form_validation->set_rules('id1', 'id', 'trim|required|numeric');
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-error" style="padding:7px; margin:7px 0 -8px 0">
                                                         <a href="#" class="close" data-dismiss="alert">&times;</a>', '
@@ -95,7 +100,8 @@ class Inventario extends CI_Controller
                                                     ');
         //si no cumple con las validaciones
         if (!$this->form_validation->run()){
-            $data['inventario']=$this->Local->get_register('Inventario');
+            $data['inventario']=$this->Local->get_register_join2('Inventario','Sedes','cod_sede_inv = id_sede');
+            $data['sede']=$this->Local->get_register('Sedes');
             $this->load->view('inventario',$data);
             //si cumple con las validaciones
         } else{
@@ -114,6 +120,7 @@ class Inventario extends CI_Controller
             }
             $compra = $this->input->post('compra1');
             $venta = $this->input->post('venta1');
+            $sede = $this->input->post('sede1');
             $data = array(
                 'cod_prod_inv' => $codigo,
                 'nombre_inv' => $nombre,
@@ -121,6 +128,7 @@ class Inventario extends CI_Controller
                 'ruta_imagen_inv' => $ruta_img,
                 'valor_compra_con_iva_inv' => $compra,
                 'valor_venta_con_iva_inv' => $venta,
+                'cod_sede_inv' => $sede
             );
             $sql2 = $this->Local->update('Inventario', $data, 'id_inv',$id);
             if ($sql2) {
@@ -137,7 +145,8 @@ class Inventario extends CI_Controller
         $this->form_validation->set_rules('id2', 'id', 'trim|required|numeric');
         //si no cumple con las validaciones
         if (!$this->form_validation->run()){
-            $data['inventario']=$this->Local->get_register('Inventario');
+            $data['inventario']=$this->Local->get_register_join2('Inventario','Sedes','cod_sede_inv = id_sede');
+            $data['sede']=$this->Local->get_register('Sedes');
             $this->load->view('inventario',$data);
             //si cumple con las validaciones
         } else{

@@ -58,9 +58,10 @@ $this->load->view('header');
             document.getElementById('id1').value = obj[0][0];
             $('#codigo1').attr('value',obj[0][1]);
             $('#nombre1').attr('value',obj[0][2]);
+            $('#tipo1').val(obj[0][3]);
             $('#compra1').attr('value',obj[0][6]);
             $('#venta1').attr('value',obj[0][7]);
-            $('#tipo1').val(obj[0][3]);
+            $('#sede1').val(obj[0][11]);
         } );
 
         $('#button3').click( function () {
@@ -129,6 +130,8 @@ $this->load->view('header');
                         <th>Valor venta + IVA</th>
                         <th>Cantidad Buena</th>
                         <th>Cantidad Dañada</th>
+                        <th>Sede</th>
+                        <th>Id Sede</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,6 +148,8 @@ $this->load->view('header');
                         <td><?php echo $key->valor_venta_con_iva_inv; ?></td>
                         <td><?php echo $key->cantidad_prod_inv; ?></td>
                         <td><?php echo $key->cantidad_dan_inv; ?></td>
+                        <td><?php echo $key->nombre_sede; ?></td>
+                        <td><?php echo $key->id_sede; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
@@ -225,6 +230,17 @@ $this->load->view('header');
                             <div class="col-sm-9">
                                 <input type="text" name="venta" value="<?php echo set_value('venta'); ?>" class="form-control">
                                 <?php echo form_error('venta'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Sede</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="sede" class="form-control">
+                                    <?php foreach ($sede as $key) { ?>
+                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                         </div>
 
@@ -312,6 +328,21 @@ $this->load->view('header');
                             <div class="col-sm-9">
                                 <input type="text" name="venta1" id="venta1" value="<?php echo set_value('venta1'); ?>" class="form-control">
                                 <?php echo form_error('venta1'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Sede</label>
+<!--                            <div class="col-sm-9">-->
+<!--                                <input type="text" name="sede1" id="sede1" value="--><?php //echo set_value('sede1'); ?><!--" class="form-control">-->
+<!--                                --><?php //echo form_error('sede1'); ?>
+<!--                            </div>-->
+                            <div class="col-sm-9">
+                                <select  type="text" name="sede1" id="sede1" class="form-control" value="<?php echo set_value('sede1') ?>">
+                                    <?php foreach ($sede as $key) { ?>
+                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                         </div>
 
