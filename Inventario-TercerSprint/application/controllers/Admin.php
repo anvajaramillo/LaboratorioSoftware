@@ -23,18 +23,21 @@ class Admin extends CI_Controller
 
     public function inventario()
     {
-        $data['inventario']=$this->Local->get_register('Inventario');
+        $data['inventario']=$this->Local->get_register_join2('Inventario','Sedes','cod_sede_inv = id_sede');
+        $data['sede']=$this->Local->get_register('Sedes');
         $this->load->view('inventario',$data);
     }
 
     public function movInventario()
     {
-        $select="id_mov,fecha_mov,id_prov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov";
+        $select="id_mov,fecha_mov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov,nombre_sede";
         $condicion1='id_inv = cod_inv_mov';
         $condicion2='id_prov = cod_prov_mov';
-        $data['movimiento']=$this->Local->get_register_join3_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2);
+        $condicion3='id_sede = cod_sede_inv';
+        $data['movimiento']=$this->Local->get_register_join4_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2,'Sedes',$condicion3);
         $data['proveedores']=$this->Local->get_register('Proveedores');
         $data['inventario']=$this->Local->get_register('Inventario');
+        $data['sede']=$this->Local->get_register('Sedes');
         $this->load->view('movimiento_inventario',$data);
     }
 

@@ -26,19 +26,22 @@ class MovInventario extends CI_Controller
         $this->form_validation->set_rules('producto', 'producto', 'trim|required|numeric');
         $this->form_validation->set_rules('cantidad', 'cantidad', 'trim|required|numeric');
         $this->form_validation->set_rules('tipo', 'tipo de movimiento', 'trim|required|max_length[44]|callback_validate_string');
-        $this->form_validation->set_rules('descripcion', 'descripcion movimiento', 'trim|max_length[99]|callback_validate_string');
+        $this->form_validation->set_rules('descripcion', 'descripcion movimiento', 'trim|required|max_length[99]|callback_validate_string');
+        $this->form_validation->set_rules('sede', 'sede', 'trim|required|numeric');
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-error" style="padding:7px; margin:7px 0 -8px 0">
                                                         <a href="#" class="close" data-dismiss="alert">&times;</a>', '
                                                     </div>
                                                     ');
         //si no cumple con las validaciones
         if (!$this->form_validation->run()){
-            $select="id_mov,fecha_mov,id_prov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov";
+            $select="id_mov,fecha_mov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov,nombre_sede";
             $condicion1='id_inv = cod_inv_mov';
             $condicion2='id_prov = cod_prov_mov';
-            $data['movimiento']=$this->Local->get_register_join3_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2);
+            $condicion3='id_sede = cod_sede_inv';
+            $data['movimiento']=$this->Local->get_register_join4_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2,'Sedes',$condicion3);
             $data['proveedores']=$this->Local->get_register('Proveedores');
             $data['inventario']=$this->Local->get_register('Inventario');
+            $data['sede']=$this->Local->get_register('Sedes');
             $this->load->view('movimiento_inventario',$data);
             //si cumple con las validaciones
         } else{
@@ -48,6 +51,7 @@ class MovInventario extends CI_Controller
             $cantidad = $this->input->post('cantidad');
             $tipo = $this->input->post('tipo');
             $descripcion = $this->input->post('descripcion');
+            $sede = $this->input->post('sede');
             $dataMov = array(
                 'fecha_mov' => $fecha,
                 'cod_prov_mov' => $proveedor,
@@ -56,6 +60,14 @@ class MovInventario extends CI_Controller
                 'tipo_movimiento_mov' => $tipo,
                 'descripcion_mov' => $descripcion
             );
+
+            $sql = $this->Local->get_register3('Inventario', 'id_inv',$producto,'cod_sede_inv',$sede);
+            if(count($sql) == 0){
+                $sql1 = $this->Local->get_register2('Inventario','id_inv',$producto);
+                $sql2 = $this->Local->get_register2('Sedes','id_sede',$sede);
+                $this->session->set_userdata('success', '<span class="label label-danger">Error: No existe el producto '.$sql1[0]->nombre_inv.' en la sede '.$sql2[0]->nombre_sede.' </span>');
+                redirect(base_url() . 'index.php/Admin/movInventario');
+            }
 
             $con=$this->Local->get_register2('Inventario', 'id_inv',$producto);
             if($tipo == 'Ingreso'){
@@ -76,9 +88,10 @@ class MovInventario extends CI_Controller
                     );
                 }
             }
-            $sql1 = $this->Local->add('Movimiento', $dataMov);
-            $sql2 = $this->Local->update('Inventario', $dataInv, 'id_inv',$producto);
-            if ($sql1 and $sql2) {
+
+            $sql3 = $this->Local->add('Movimiento', $dataMov);
+            $sql4 = $this->Local->update2('Inventario', $dataInv, 'id_inv',$producto,'cod_sede_inv',$sede);
+            if ($sql3 and $sql4) {
                 $this->session->set_userdata('success', '<span class="label label-success">El movimiento de inventario ha sido realizado con éxito</span>');
             } else {
                 $this->session->set_userdata('success', '<span class="label label-danger">El movimiento de inventario no pudo ser realizado con éxito</span>');
@@ -89,8 +102,7 @@ class MovInventario extends CI_Controller
 
     public function editarMovInventario()
     {
-        $this->form_validation->set_rules('proveedor1', 'proveedor', 'trim|required|numeric');
-        $this->form_validation->set_rules('descripcion1', 'descripcion movimiento', 'trim|max_length[99]|callback_validate_string');
+        $this->form_validation->set_rules('descripcion1', 'descripcion movimiento', 'trim|required|max_length[99]|callback_validate_string');
         $this->form_validation->set_rules('id1', 'id', 'trim|required|numeric');
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-error" style="padding:7px; margin:7px 0 -8px 0">
                                                         <a href="#" class="close" data-dismiss="alert">&times;</a>', '
@@ -98,20 +110,20 @@ class MovInventario extends CI_Controller
                                                     ');
         //si no cumple con las validaciones
         if (!$this->form_validation->run()){
-            $select="id_mov,fecha_mov,id_prov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov";
+            $select="id_mov,fecha_mov,nombre_prov,nombre_inv,cantidad_prod_mov,tipo_movimiento_mov,descripcion_mov,nombre_sede";
             $condicion1='id_inv = cod_inv_mov';
             $condicion2='id_prov = cod_prov_mov';
-            $data['movimiento']=$this->Local->get_register_join3_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2);
+            $condicion3='id_sede = cod_sede_inv';
+            $data['movimiento']=$this->Local->get_register_join4_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2,'Sedes',$condicion3);
             $data['proveedores']=$this->Local->get_register('Proveedores');
             $data['inventario']=$this->Local->get_register('Inventario');
+            $data['sede']=$this->Local->get_register('Sedes');
             $this->load->view('movimiento_inventario',$data);
             //si cumple con las validaciones
         } else{
-            $proveedor = $this->input->post('proveedor1');
             $descripcion = $this->input->post('descripcion1');
             $id = $this->input->post('id1');
             $dataMov = array(
-                'cod_prov_mov' => $proveedor,
                 'descripcion_mov' => $descripcion
             );
             $sql1 = $this->Local->update('Movimiento', $dataMov,'id_mov',$id);
