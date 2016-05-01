@@ -51,6 +51,7 @@ $this->load->view('header');
         <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Inventario</a></li>
         <li class="active"><a href='#mov'>Movimiento Inventario</a></li>
         <li><a href='<?php echo base_url('index.php/Admin/clientes') ?>'>Clientes</a></li>
+        <li><a href='<?php echo base_url('index.php/Admin/facturas') ?>'>Facturas</a></li>
     </ul>
 </div>
 
