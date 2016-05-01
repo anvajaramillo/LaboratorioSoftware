@@ -5,7 +5,7 @@ $this->load->view('header');
 <html lang="es">
 <header>
     <title>
-        Clientes
+        Facturas
     </title>
 
     <script type="text/javascript" class="init">
@@ -14,11 +14,11 @@ $this->load->view('header');
 
             //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
             //una celda esta en 'selected'
-            var table = $('#Cliente').DataTable({
+            var table = $('#Fact').DataTable({
                 "scrollY": "210",
                 "scrollCollapse" : true
             });
-            $('#Cliente tbody').on( 'click', 'tr', function () {
+            $('#Fact tbody').on( 'click', 'tr', function () {
                 if ( $(this).hasClass('selected') ) {
                     $(this).removeClass('selected');
                     $('#button2').attr("disabled", true);
@@ -29,6 +29,10 @@ $this->load->view('header');
                     $('#button2').attr("disabled", false);
                     $('#button3').attr("disabled", false);
                 }
+            } );
+
+            $('#button').click( function () {
+                document.getElementById('band').value = 0;
             } );
 
             $('#button2').click( function () {
@@ -50,7 +54,45 @@ $this->load->view('header');
                 document.getElementById('nombre2').innerHTML = obj[0][2];
             } );
 
+            $('#identificacion').change(function () {
+                //$('#nombre').empty();
+                var valor=$('#identificacion').val();
+                //alert(valor);
+                $.ajax({
+                    type: "POST",
+                    url:"<?php echo base_url('index.php/Admin/FactClient') ?>",
+                    data:{
+                        id:valor,
+                    },
+                    success:function(datos){
+                        //$('#nombreCli').append(datos);
+                        $('#nombreCli').html(datos);
+                    },
+                    error:function(datos){
+                        alert('error');
+                    }
+                });
+            });
+
         } );
+
+    </script>
+
+    <script>
+        $(document).ready(function (){
+            //agregar
+            $('#add').click(function (){
+                //$('#addprod').css("display","block");
+                document.getElementById('band').value = 1;
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function ventanaadd(){
+            //alert('hola');
+            var submit=document.getElementById('button');
+            submit.click();
+        }
 
     </script>
 
@@ -61,8 +103,8 @@ $this->load->view('header');
     <ul class="nav nav-tabs" >
         <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Inventario</a></li>
         <li><a href='<?php echo base_url('index.php/Admin/movInventario') ?>'>Movimiento Inventario</a></li>
-        <li class="active"><a href='#cli'>Clientes</a></li>
-        <li><a href='<?php echo base_url('index.php/Admin/facturas') ?>'>Facturas</a></li>
+        <li><a href='<?php echo base_url('index.php/Admin/clientes') ?>'>Clientes</a></li>
+        <li class="active"><a href='#fac'>Facturas</a></li>
     </ul>
 </div>
 
@@ -70,7 +112,7 @@ $this->load->view('header');
 
 <div class="cuerpo container panel-body" id="cuerpo1">
 
-    <div  class="tab-pane active" id="cli">
+    <div  class="tab-pane active" id="fac">
         <div id="navegador">
             <ul>
                 <li><a id="button" href="#myModal1" class="btn">Agregar</a></li>
@@ -80,7 +122,7 @@ $this->load->view('header');
         </div>
 
         <div style="text-align: center">
-            <h1>Clientes</h1><?php
+            <h1>Facturas</h1><?php
             //mostrar mensaje de almacenamiento satisfactorio o no de la bd
             if(key_exists('success', $this->session->all_userdata())){
                 echo "<h4>".$this->session->userdata('success')."</h4>";
@@ -94,32 +136,22 @@ $this->load->view('header');
             </div>
         <?php } ?>
 
-        <?php if (isset($clientes['error'])) { ?>
+        <?php if (isset($facturas['error'])) { ?>
             <h2>Ha ocurrido un error en la base de datos</h2>
         <?php } else {	?>
-            <table id="Cliente" class="display" cellspacing="0" width="100%">
+            <table id="Fact" class="display" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Identificación</th>
-                    <th>Nombre</th>
-                    <th>Fecha de Nacimiento</th>
-                    <th>Teléfono</th>
-                    <th>Dirección</th>
-                    <th>Ciudad</th>
+                    <th>Número de Sede</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php //se recorre el arreglo por medio de un foreach y se accede a el como un objeto ?>
-                <?php foreach ($clientes as $key) { ?>
+                <?php foreach ($facturas as $key) { ?>
                     <tr>
-                        <td><?php echo $key->id_cli; ?></td>
-                        <td><?php echo $key->identificacion_cli; ?></td>
-                        <td><?php echo $key->nombre_cli; ?></td>
-                        <td><?php echo $key->fecha_nac_cli; ?></td>
-                        <td><?php echo $key->telefono_cli; ?></td>
-                        <td><?php echo $key->direccion_cli; ?></td>
-                        <td><?php echo $key->ciudad_cli; ?></td>
+                        <td><?php echo $key->id_fact; ?></td>
+                        <td><?php echo $key->cod_sede_fact; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
@@ -127,69 +159,97 @@ $this->load->view('header');
         <?php } ?>
 
         <div id="myModal1" class="modalmask">
-            <div class="modalbox rotate">
-                <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Agregar Cliente</h3>
-                <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/cliente/crearCliente')?>" method="post">
-                    <div class="modal-body1">
+            <?php if($bool == 1){ ?>
+                <div class="modalbox normal">
+                    <a href="#close" class="close">X</a>
+                    <h3 class="modal-title">Agregar Factura</h3>
+                    <br><br>
+                    <form class="form-horizontal" action="<?php echo base_url('index.php/factura/crearFactura')?>" method="post">
+                        <div class="modal-body1">
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Identificación cliente</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="identificacion" value="<?php echo set_value('identificacion');?>" class="form-control">
-                                <?php echo form_error('identificacion'); ?>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Sede</label>
+                                <div class="col-sm-9">
+                                    <select  type="text" name="sede" class="form-control">
+                                        <?php foreach ($sede as $key) { ?>
+                                            <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Nombre cliente</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="nombre" value="<?php echo set_value('nombre');?>" class="form-control">
-                                <?php echo form_error('nombre'); ?>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Código del cliente</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="identificacion" name="identificacion" value="<?php echo set_value('identificacion');?>" class="form-control">
+                                    <?php echo form_error('identificacion'); ?>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Fecha de nacimiento</label>
-                            <div class="col-sm-9">
-                                <input type="date" name="fecha" value="<?php echo set_value('fecha');?>" class="form-control">
-                                <?php echo form_error('fecha'); ?>
+                            <div class="form-group">
+                                <label class="col-sm-9 control-label">Nombre del cliente: <span id="nombreCli"></span></label>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Teléfono</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="telefono" value="<?php echo set_value('telefono');?>" class="form-control">
-                                <?php echo form_error('telefono'); ?>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Código del producto</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="producto" name="producto" value="<?php echo set_value('producto');?>" class="form-control">
+                                    <?php echo form_error('producto'); ?>
+                                </div>
                             </div>
-                        </div>
+            <?php } else { ?>
+                <div class="modalbox rotate">
+                    <a href="#close" class="close">X</a>
+                    <h3 class="modal-title">Agregar Factura</h3>
+                    <br><br>
+                    <form class="form-horizontal" action="<?php echo base_url('index.php/factura/crearFactura')?>" method="post">
+                        <div class="modal-body1">
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Dirección</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="direccion" value="<?php echo set_value('direccion');?>" class="form-control">
-                                <?php echo form_error('direccion'); ?>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Sede</label>
+                                <div class="col-sm-9">
+                                    <select  type="text" name="sede" class="form-control">
+                                        <?php foreach ($sede as $key) { ?>
+                                            <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Ciudad</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="ciudad" value="<?php echo set_value('ciudad');?>" class="form-control">
-                                <?php echo form_error('ciudad'); ?>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Código del cliente</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="identificacion" name="identificacion" value="<?php echo set_value('identificacion');?>" class="form-control">
+                                    <?php echo form_error('identificacion'); ?>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
-                            <input type="submit" class="btn btn-danger" value="Guardar">
-                        </div>
+                            <div class="form-group">
+                                <label class="col-sm-9 control-label">Nombre del cliente: <span id="nombreCli"></span></label>
+                            </div>
 
-                    </div>
-                </form>
-            </div>
+<!--                            <div id="addprod" style="display: none;">-->
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Código del producto</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="producto" name="producto" value="<?php echo set_value('producto');?>" class="form-control">
+                                        <?php echo form_error('producto'); ?>
+                                    </div>
+                                </div>
+<!--                            </div>-->
+            <?php } ?>
+                            <input type="hidden" id="band" name="band">
+
+                            <div class="modal-footer" style="text-align: right; position: relative;top:80px">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
+                                <input type="submit" class="btn btn-danger" id="add" value="Añadir Producto">
+<!--                                <a id="add" class="btn btn-danger" >Añadir Producto</a>-->
+                                <input type="submit" class="btn btn-danger" value="Terminar Factura">
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
         </div>
 
         <div id="myModal2" class="modalmask">
@@ -279,6 +339,12 @@ $this->load->view('header');
                 </form>
             </div>
         </div>
+
+        <?php if($bool == 1){ ?>
+            <script>
+                ventanaadd();
+            </script>
+        <?php } ?>
 
     </div>
 </div>

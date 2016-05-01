@@ -47,11 +47,30 @@ class Admin extends CI_Controller
         $this->load->view('clientes',$data);
     }
 
+    public function facturas(){
+        $data['facturas']=$this->Local->get_register('Facturas');
+        $data['sede']=$this->Local->get_register('Sedes');
+        $data['bool']=0;
+        $this->load->view('facturas',$data);
+    }
+
     public function ObtenerRutaImg(){
         $id_invt=$_POST['id_invt'];
         $data=$this->Local->getElementWhere('Inventario','ruta_imagen_inv','id_inv', $id_invt);
         $img='<img src="'.RUTA_SUB.$data[0]->ruta_imagen_inv.'" width="100%" height="100%" title="producto">';
         echo $img;
+    }
+
+    public function FactClient(){
+        $id=$_POST['id'];
+        $sql=$this->Local->getElementWhere('Clientes', 'nombre_cli', 'identificacion_cli', $id);
+        if(count($sql)>0){
+            $datos=$sql[0]->nombre_cli;
+        }else{
+            $datos="No existe cliente con el número de identificación dado, debe realizar el ingreso del cliente.";
+        }
+
+        echo $datos;
     }
 
 }
