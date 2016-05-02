@@ -31,10 +31,6 @@ $this->load->view('header');
                 }
             } );
 
-            $('#button').click( function () {
-                document.getElementById('band').value = 0;
-            } );
-
             $('#button2').click( function () {
                 var obj = table.rows('.selected').data();
                 console.log(obj);
@@ -73,6 +69,133 @@ $this->load->view('header');
                     }
                 });
             });
+            $('#identificacion').ready(function () {
+                //$('#nombre').empty();
+                var valor=$('#identificacion').val();
+                //alert(valor);
+                $.ajax({
+                    type: "POST",
+                    url:"<?php echo base_url('index.php/Admin/FactClient') ?>",
+                    data:{
+                        id:valor,
+                    },
+                    success:function(datos){
+                        //$('#nombreCli').append(datos);
+                        $('#nombreCli').html(datos);
+                    },
+                    error:function(datos){
+                        alert('error');
+                    }
+                });
+            });
+
+            $('#producto').change(function () {
+                //$('#nombre').empty();
+                var valor1=$('#producto').val();
+                var valor2=$('#sede').val();
+                //alert(valor);
+                $.ajax({
+                    type: "POST",
+                    url:"<?php echo base_url('index.php/Admin/FactPro') ?>",
+                    data:{
+                        id:valor1,
+                        sede:valor2,
+                    },
+                    success:function(datos){
+                        //$('#nombreCli').append(datos);
+                        $('#nombrePro').html(datos);
+                    },
+                    error:function(datos){
+                        alert('error');
+                    }
+                });
+            });
+
+            $('#producto').ready(function () {
+                //$('#nombre').empty();
+                var valor1=$('#producto').val();
+                var valor2=$('#sede').val();
+                //alert(valor);
+                $.ajax({
+                    type: "POST",
+                    url:"<?php echo base_url('index.php/Admin/FactPro') ?>",
+                    data:{
+                        id:valor1,
+                        sede:valor2,
+                    },
+                    success:function(datos){
+                        //$('#nombreCli').append(datos);
+                        $('#nombrePro').html(datos);
+                    },
+                    error:function(datos){
+                        alert('error');
+                    }
+                });
+            });
+            $('#sede').change(function () {
+                //$('#nombre').empty();
+                var valor1=$('#producto').val();
+                var valor2=$('#sede').val();
+                //alert(valor);
+                $.ajax({
+                    type: "POST",
+                    url:"<?php echo base_url('index.php/Admin/FactPro') ?>",
+                    data:{
+                        id:valor1,
+                        sede:valor2,
+                    },
+                    success:function(datos){
+                        //$('#nombreCli').append(datos);
+                        $('#nombrePro').html(datos);
+                    },
+                    error:function(datos){
+                        alert('error');
+                    }
+                });
+            });
+            $('#producto1').change(function () {
+                //$('#nombre').empty();
+                var valor1=$('#producto1').val();
+                var valor2=$('#sede1').val();
+                //alert(valor);
+                $.ajax({
+                    type: "POST",
+                    url:"<?php echo base_url('index.php/Admin/FactPro') ?>",
+                    data:{
+                        id:valor1,
+                        sede:valor2,
+                    },
+                    success:function(datos){
+                        //$('#nombreCli').append(datos);
+                        $('#nombrePro1').html(datos);
+                    },
+                    error:function(datos){
+                        alert('error');
+                    }
+                });
+            });
+
+            $('#producto1').ready(function () {
+                //$('#nombre').empty();
+                var valor1=$('#producto1').val();
+                var valor2=$('#sede1').val();
+                //alert(valor);
+                $.ajax({
+                    type: "POST",
+                    url:"<?php echo base_url('index.php/Admin/FactPro') ?>",
+                    data:{
+                        id:valor1,
+                        sede:valor2,
+                    },
+                    success:function(datos){
+                        //$('#nombreCli').append(datos);
+                        $('#nombrePro1').html(datos);
+                    },
+                    error:function(datos){
+                        alert('error');
+                    }
+                });
+            });
 
         } );
 
@@ -84,6 +207,10 @@ $this->load->view('header');
             $('#add').click(function (){
                 //$('#addprod').css("display","block");
                 document.getElementById('band').value = 1;
+            });
+            $('#fin').click(function (){
+                //$('#addprod').css("display","block");
+                document.getElementById('band').value = 0;
             });
         });
     </script>
@@ -167,35 +294,28 @@ $this->load->view('header');
                     <form class="form-horizontal" action="<?php echo base_url('index.php/factura/crearFactura')?>" method="post">
                         <div class="modal-body1">
 
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Sede</label>
-                                <div class="col-sm-9">
-                                    <select  type="text" name="sede" class="form-control">
-                                        <?php foreach ($sede as $key) { ?>
-                                            <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
+                            <input type="hidden" id="sede1" name="sede" value="<?php echo $this->session->userdata('id_sede'); ?>">
 
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Código del cliente</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="identificacion" name="identificacion" value="<?php echo set_value('identificacion');?>" class="form-control">
-                                    <?php echo form_error('identificacion'); ?>
-                                </div>
+                                <label class="col-sm-11 control-label">Sede: <?php echo $this->session->userdata('nombre_sede'); ?></label>
                             </div>
 
+                            <input type="hidden" name="identificacion" value="<?php echo $this->session->userdata('ident_cliente'); ?>">
+
                             <div class="form-group">
-                                <label class="col-sm-9 control-label">Nombre del cliente: <span id="nombreCli"></span></label>
+                                <label class="col-sm-11 control-label">Nombre del cliente: <?php echo $this->session->userdata('nombre_cliente'); ?></label>
                             </div>
 
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Código del producto</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="producto" name="producto" value="<?php echo set_value('producto');?>" class="form-control">
+                                    <input type="text" id="producto1" name="producto" value="<?php echo set_value('producto');?>" class="form-control">
                                     <?php echo form_error('producto'); ?>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-11 control-label">Nombre del producto: <span id="nombrePro1"></span></label>
                             </div>
             <?php } else { ?>
                 <div class="modalbox rotate">
@@ -208,7 +328,7 @@ $this->load->view('header');
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Sede</label>
                                 <div class="col-sm-9">
-                                    <select  type="text" name="sede" class="form-control">
+                                    <select  type="text" id="sede" name="sede" class="form-control">
                                         <?php foreach ($sede as $key) { ?>
                                             <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
                                         <?php } ?>
@@ -225,18 +345,22 @@ $this->load->view('header');
                             </div>
 
                             <div class="form-group">
-                                <label class="col-sm-9 control-label">Nombre del cliente: <span id="nombreCli"></span></label>
+                                <label class="col-sm-11 control-label">Nombre del cliente: <span id="nombreCli"></span></label>
                             </div>
 
 <!--                            <div id="addprod" style="display: none;">-->
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">Código del producto</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" id="producto" name="producto" value="<?php echo set_value('producto');?>" class="form-control">
-                                        <?php echo form_error('producto'); ?>
-                                    </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Código del producto</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="producto" name="producto" value="<?php echo set_value('producto');?>" class="form-control">
+                                    <?php echo form_error('producto'); ?>
                                 </div>
+                            </div>
 <!--                            </div>-->
+
+                            <div class="form-group">
+                                <label class="col-sm-11 control-label">Nombre del producto: <span id="nombrePro"></span></label>
+                            </div>
             <?php } ?>
                             <input type="hidden" id="band" name="band">
 
@@ -244,7 +368,7 @@ $this->load->view('header');
                                 <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
                                 <input type="submit" class="btn btn-danger" id="add" value="Añadir Producto">
 <!--                                <a id="add" class="btn btn-danger" >Añadir Producto</a>-->
-                                <input type="submit" class="btn btn-danger" value="Terminar Factura">
+                                <input type="submit" class="btn btn-danger" id="fin" value="Terminar Factura">
                             </div>
 
                         </div>
