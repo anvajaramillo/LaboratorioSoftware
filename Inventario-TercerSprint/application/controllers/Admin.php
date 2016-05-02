@@ -67,7 +67,31 @@ class Admin extends CI_Controller
         if(count($sql)>0){
             $datos=$sql[0]->nombre_cli;
         }else{
-            $datos="No existe cliente con el número de identificación dado, debe realizar el ingreso del cliente.";
+            $datos="No existe cliente con el número de identificación ".$id.", debe realizar el ingreso del cliente.";
+        }
+
+        echo $datos;
+    }
+
+    public function FactPro(){
+        $id=$_POST['id'];
+        $sede=$_POST['sede'];
+        $sql=$this->Local->getElementWhere('Inventario', 'nombre_inv,cantidad_prod_inv,cod_sede_inv', 'cod_prod_inv', $id);
+        if(count($sql)>0){
+            foreach ($sql as $key) {
+                if($key->cod_sede_inv==$sede){
+                    if($key->cantidad_prod_inv>0){
+                        $datos=$key->nombre_inv.", Cantidad: ".$key->cantidad_prod_inv;
+                    }else{
+                        $datos="El producto con código ".$id." se encuentra agotado";
+                    }
+                    break;
+                }else{
+                    $datos="No existe producto con código ".$id." en el inventario de la sede seleccionada";
+                }
+            }
+        }else{
+            $datos="No existe producto con código ".$id." en el inventario de la sede seleccionada";
         }
 
         echo $datos;

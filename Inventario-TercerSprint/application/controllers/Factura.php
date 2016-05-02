@@ -21,7 +21,19 @@ class Factura extends CI_Controller
     }
 
     public function crearFactura(){
-        //$bool = $this->input->post('band');
+        $sede=$this->input->post('sede');
+        $cliente=$this->input->post('identificacion');
+        $producto=$this->input->post('producto');
+        $band = $this->input->post('band');
+        if($band == 1){
+            $sql1=$this->Local->getElementWhere('Sedes', 'id_sede,nombre_sede', 'id_sede', $sede);
+            $this->session->set_userdata('id_sede', $sql1[0]->id_sede);
+            $this->session->set_userdata('nombre_sede', $sql1[0]->nombre_sede);
+            $sql2=$this->Local->getElementWhere('Clientes', 'nombre_cli,identificacion_cli', 'identificacion_cli', $cliente);
+            $this->session->set_userdata('ident_cliente', $sql2[0]->identificacion_cli);
+            $this->session->set_userdata('nombre_cliente', $sql2[0]->nombre_cli);
+        }
+
         $data['facturas']=$this->Local->get_register('Facturas');
         $data['sede']=$this->Local->get_register('Sedes');
         $data['bool']=$this->input->post('band');
