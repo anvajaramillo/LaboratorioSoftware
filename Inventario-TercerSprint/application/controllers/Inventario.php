@@ -26,10 +26,13 @@ class Inventario extends CI_Controller
         $this->form_validation->set_rules('nombre', 'nombre producto', 'trim|required|max_length[44]|callback_validate_string');
         $this->form_validation->set_rules('tipo', 'tipo producto', 'trim|required|max_length[44]|callback_validate_string');
         $this->form_validation->set_rules('iva', 'IVA', 'trim|required|decimal');
-        $this->form_validation->set_rules('img', 'imagen', 'max_length[20]|callback_img_jpgpng');
+        if($this->input->post('id')==0){
+            $this->form_validation->set_rules('img', 'imagen', 'max_length[20]|callback_img_jpgpng');
+        }
         $this->form_validation->set_rules('compra', 'valor unitario compra con IVA', 'trim|required|numeric');
         $this->form_validation->set_rules('venta', 'valor unitario venta con IVA', 'trim|required|numeric');
         $this->form_validation->set_rules('sede', 'sede', 'trim|required|numeric');
+        $this->form_validation->set_rules('id', 'sede', 'trim|required|numeric');
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-error" style="padding:7px; margin:7px 0 -8px 0">
                                                         <a href="#" class="close" data-dismiss="alert">&times;</a>', '
                                                     </div>
@@ -45,10 +48,16 @@ class Inventario extends CI_Controller
             $nombre = $this->input->post('nombre');
             $tipo = $this->input->post('tipo');
             $iva = $this->input->post('iva');
-            $img=$_FILES["img"]["name"];
-            $ruta_img=RUTA.$codigo."_".$nombre."_".$img;
-            move_uploaded_file($_FILES['img']['tmp_name'],$ruta_img);
-            $ruta_img=$codigo."_".$nombre."_".$img;
+            $id=$this->input->post('id');
+            if($id != 0){
+                $sql=$this->Local->get_register2('Inventario','id_inv',$id);
+                $ruta_img = $sql[0]->ruta_imagen_inv;
+            }else{
+                $img=$_FILES["img"]["name"];
+                $ruta_img=RUTA.$codigo."_".$nombre."_".$img;
+                move_uploaded_file($_FILES['img']['tmp_name'],$ruta_img);
+                $ruta_img=$codigo."_".$nombre."_".$img;
+            }
             $compra = $this->input->post('compra');
             $venta = $this->input->post('venta');
             $sede = $this->input->post('sede');
@@ -89,7 +98,7 @@ class Inventario extends CI_Controller
         $this->form_validation->set_rules('iva1', 'IVA', 'trim|required|decimal');
         $img = $_FILES["img1"]["name"];
         if($img != ""){
-            $this->form_validation->set_rules('img1', 'imagen', 'max_length[20]|callback_img_jpgpng');
+            $this->form_validation->set_rules('img1', 'imagen', 'max_length[20]|callback_img_jpgpng1');
         }
         $this->form_validation->set_rules('compra1', 'valor unitario compra con IVA', 'trim|required|numeric');
         $this->form_validation->set_rules('venta1', 'valor unitario venta con IVA', 'trim|required|numeric');
@@ -123,11 +132,24 @@ class Inventario extends CI_Controller
             $venta = $this->input->post('venta1');
             $sede = $this->input->post('sede1');
 
-            $sql = $this->Local->get_register3('Inventario', 'cod_prod_inv', $codigo, 'cod_sede_inv', $sede);
-            if(count($sql) > 0){
-                $sql2 = $this->Local->get_register2('Sedes', 'id_sede', $sede);
-                $this->session->set_userdata('success', '<span class="label label-danger">Error: el código de producto '.$codigo. ' ya se encuentra registrado en la sede ' .$sql2[0]->nombre_sede.'</span>');
-                redirect(base_url() . 'index.php/Admin/inventario');
+            $sql = $this->Local->get_register2('Inventario', 'id_inv',$id);
+            if($codigo != $sql[0]->cod_prod_inv){
+                $sql1="SELECT * FROM Facturas
+                      JOIN Facturas_Cliente
+                      ON id_fact = cod_fact_fact_cli
+                      JOIN Clientes
+                      ON cod_cli_fact_cli = id_cli
+                      GROUP BY id_fact";
+                $sql1=$this->Local->get_register_sql($sql1);
+                foreach ($sql1 as $key) {
+                    if($key->id_inv == $id){
+                        if($codigo == $key->cod_prod_inv){
+                            $sql2 = $this->Local->get_register2('Sedes', 'id_sede', $sede);
+                            $this->session->set_userdata('success', '<span class="label label-danger">Error: el código de producto '.$codigo. ' ya se encuentra registrado en la sede ' .$sql2[0]->nombre_sede.'</span>');
+                            redirect(base_url() . 'index.php/Admin/inventario');
+                        }
+                    }
+                }
             }
             $data = array(
                 'cod_prod_inv' => $codigo,
@@ -184,6 +206,21 @@ class Inventario extends CI_Controller
     public function img_jpgpng($img){
         $valor= $_FILES["img"]["type"];
         if(!$_FILES["img"]["tmp_name"]){
+            $this->form_validation->set_message('img_jpgpng', 'Se requiere subir una imagen.');
+            return false;
+        }else{
+            if($valor=="image/jpeg" || $valor=="image/png"){
+                return true;
+            }else{
+                $this->form_validation->set_message('img_jpgpng', 'Solo se permite imagenes jpg o png');
+                return false;
+            }
+        }
+    }
+
+    public function img_jpgpng1($img){
+        $valor= $_FILES["img1"]["type"];
+        if(!$_FILES["img1"]["tmp_name"]){
             $this->form_validation->set_message('img_jpgpng', 'Se requiere subir una imagen.');
             return false;
         }else{

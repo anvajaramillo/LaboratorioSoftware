@@ -142,9 +142,9 @@ class Factura extends CI_Controller
                 $this->load->view('facturas', $data);
             }else{
                 if ($sql and $sql4) {
-                    $this->session->set_userdata('success', '<span class="label label-success">El cliente ha sido guardado con éxito</span>');
+                    $this->session->set_userdata('success', '<span class="label label-success">La factura ha sido guardada con éxito</span>');
                 } else {
-                    $this->session->set_userdata('success', '<span class="label label-danger">El cliente no pudo ser guardado con éxito</span>');
+                    $this->session->set_userdata('success', '<span class="label label-danger">La factura no puedo ser guardada con éxito</span>');
                 }
                 redirect(base_url() . 'index.php/Admin/facturas');
             }

@@ -42,14 +42,28 @@ $this->load->view('header');
         $('#Invt tbody').on( 'click', 'tr', function () {
             if ( $(this).hasClass('selected') ) {
                 $(this).removeClass('selected');
+                $('#button1').attr("disabled", true);
                 $('#button2').attr("disabled", true);
                 $('#button3').attr("disabled", true);
             }else {
                 table.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
+                $('#button1').attr("disabled", false);
                 $('#button2').attr("disabled", false);
                 $('#button3').attr("disabled", false);
             }
+        } );
+
+        $('#button1').click( function () {
+            var obj = table.rows('.selected').data();
+            console.log(obj);
+            document.getElementById('id').value = obj[0][0];
+            $('#codigo').attr('value',obj[0][1]);
+            $('#nombre').attr('value',obj[0][2]);
+            $('#tipo').val(obj[0][3]);
+            $('#compra').attr('value',obj[0][6]);
+            $('#venta').attr('value',obj[0][7]);
+            $('#sede').val(obj[0][11]);
         } );
 
         $('#button2').click( function () {
@@ -167,6 +181,17 @@ $this->load->view('header');
                     <div class="modal-body1">
 
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">Sede</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="sede" class="form-control">
+                                    <?php foreach ($sede as $key) { ?>
+                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">Código Producto</label>
                             <div class="col-sm-9">
                                 <input type="text" name="codigo" value="<?php echo set_value('codigo');?>" class="form-control">
@@ -216,7 +241,6 @@ $this->load->view('header');
                                 <input type="file" name="img" value="<?php echo set_value('img'); ?>">
                                 <label style="font-size: 0.8em;">Solo imagenes PNG y JPG</label>
                                 <?php echo form_error('img'); ?>
-                                <input type="hidden" name="band" value="0">
                             </div>
                         </div>
 
@@ -236,16 +260,7 @@ $this->load->view('header');
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Sede</label>
-                            <div class="col-sm-9">
-                                <select  type="text" name="sede" class="form-control">
-                                    <?php foreach ($sede as $key) { ?>
-                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
+                        <input type="hidden" name="id" value="0">
 
                         <div class="modal-footer" style="text-align: right; position: relative;top:80px">
                             <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
@@ -264,6 +279,17 @@ $this->load->view('header');
                 <br><br>
                 <form class="form-horizontal" action="<?php echo base_url('index.php/inventario/crearInventario')?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body1">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Sede</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="sede" class="form-control">
+                                    <?php foreach ($sede as $key) { ?>
+                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Código Producto</label>
@@ -310,15 +336,6 @@ $this->load->view('header');
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Imagen</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="img" name="img" readonly="true">
-                                <?php echo form_error('img'); ?>
-                                <input type="hidden" name="band" value="1">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <label class="col-sm-3 control-label">Valor unitario compra con IVA</label>
                             <div class="col-sm-9">
                                 <input type="text" id="compra" name="compra" readonly="true" value="<?php echo set_value('compra'); ?>" class="form-control">
@@ -334,16 +351,7 @@ $this->load->view('header');
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Sede</label>
-                            <div class="col-sm-9">
-                                <select  type="text" name="sede" class="form-control">
-                                    <?php foreach ($sede as $key) { ?>
-                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
+                        <input type="hidden" id="id" name="id">
 
                         <div class="modal-footer" style="text-align: right; position: relative;top:80px">
                             <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
@@ -434,10 +442,6 @@ $this->load->view('header');
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Sede</label>
-<!--                            <div class="col-sm-9">-->
-<!--                                <input type="text" name="sede1" id="sede1" value="--><?php //echo set_value('sede1'); ?><!--" class="form-control">-->
-<!--                                --><?php //echo form_error('sede1'); ?>
-<!--                            </div>-->
                             <div class="col-sm-9">
                                 <select  type="text" name="sede1" id="sede1" class="form-control" value="<?php echo set_value('sede1') ?>">
                                     <?php foreach ($sede as $key) { ?>
