@@ -269,8 +269,10 @@ $this->load->view('header');
             <table id="Fact" class="display" cellspacing="0" width="100%">
                 <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>Id Factura</th>
+                    <th>Fecha de Registro</th>
                     <th>Número de Sede</th>
+                    <th>Identificación Cliente</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -278,7 +280,9 @@ $this->load->view('header');
                 <?php foreach ($facturas as $key) { ?>
                     <tr>
                         <td><?php echo $key->id_fact; ?></td>
+                        <td><?php echo $key->fecha_fact; ?></td>
                         <td><?php echo $key->cod_sede_fact; ?></td>
+                        <td><?php echo $key->identificacion_cli; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
@@ -316,6 +320,14 @@ $this->load->view('header');
 
                             <div class="form-group">
                                 <label class="col-sm-11 control-label">Nombre del producto: <span id="nombrePro1"></span></label>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Cantidad del producto</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="cantidad" value="<?php echo set_value('cantidad');?>" class="form-control">
+                                    <?php echo form_error('cantidad'); ?>
+                                </div>
                             </div>
             <?php } else { ?>
                 <div class="modalbox rotate">
@@ -361,8 +373,17 @@ $this->load->view('header');
                             <div class="form-group">
                                 <label class="col-sm-11 control-label">Nombre del producto: <span id="nombrePro"></span></label>
                             </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Cantidad del producto</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="cantidad" value="<?php echo set_value('cantidad');?>" class="form-control">
+                                    <?php echo form_error('cantidad'); ?>
+                                </div>
+                            </div>
             <?php } ?>
                             <input type="hidden" id="band" name="band">
+                            <input type="hidden" id="id" name="id" value="<?php echo $this->session->userdata('id'); ?>">
 
                             <div class="modal-footer" style="text-align: right; position: relative;top:80px">
                                 <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>

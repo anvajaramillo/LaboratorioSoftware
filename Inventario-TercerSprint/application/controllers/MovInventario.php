@@ -40,7 +40,6 @@ class MovInventario extends CI_Controller
             $condicion3='id_sede = cod_sede_inv';
             $data['movimiento']=$this->Local->get_register_join4_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2,'Sedes',$condicion3);
             $data['proveedores']=$this->Local->get_register('Proveedores');
-            $data['inventario']=$this->Local->get_register('Inventario');
             $data['sede']=$this->Local->get_register('Sedes');
             $this->load->view('movimiento_inventario',$data);
             //si cumple con las validaciones

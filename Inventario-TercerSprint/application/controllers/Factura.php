@@ -21,23 +21,135 @@ class Factura extends CI_Controller
     }
 
     public function crearFactura(){
-        $sede=$this->input->post('sede');
-        $cliente=$this->input->post('identificacion');
-        $producto=$this->input->post('producto');
-        $band = $this->input->post('band');
-        if($band == 1){
-            $sql1=$this->Local->getElementWhere('Sedes', 'id_sede,nombre_sede', 'id_sede', $sede);
-            $this->session->set_userdata('id_sede', $sql1[0]->id_sede);
-            $this->session->set_userdata('nombre_sede', $sql1[0]->nombre_sede);
-            $sql2=$this->Local->getElementWhere('Clientes', 'nombre_cli,identificacion_cli', 'identificacion_cli', $cliente);
-            $this->session->set_userdata('ident_cliente', $sql2[0]->identificacion_cli);
-            $this->session->set_userdata('nombre_cliente', $sql2[0]->nombre_cli);
-        }
+        $this->form_validation->set_rules('sede', 'sede', 'trim|required|numeric');
+        $this->form_validation->set_rules('identificacion', 'identificacón del cliente', 'trim|required|is_natural');
+        $this->form_validation->set_rules('producto', 'producto', 'trim|required|numeric');
+        $this->form_validation->set_rules('cantidad', 'cantidad', 'trim|required|is_natural');
+        $this->form_validation->set_rules('band', 'band', 'trim|required|numeric');
+        $this->form_validation->set_rules('id', 'id', 'trim|required|numeric');
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-error" style="padding:7px; margin:7px 0 -8px 0">
+                                                        <a href="#" class="close" data-dismiss="alert">&times;</a>', '
+                                                    </div>
+                                                    ');
+        //si no cumple con las validaciones
+        if (!$this->form_validation->run()){
+            $data['facturas']=$this->Local->get_register_join3('Facturas', 'Facturas_Cliente', 'id_fact = cod_fact_fact_cli', 'Clientes',  'cod_cli_fact_cli = id_cli');
+            $data['sede']=$this->Local->get_register('Sedes');
+            $data['bool']=0;
+            $this->load->view('facturas',$data);
+            //si cumple con las validaciones
+        } else {
+            $sede = $this->input->post('sede');
+            $cliente = $this->input->post('identificacion');
+            $producto = $this->input->post('producto');
+            $cantidad = $this->input->post('cantidad');
+            $band = $this->input->post('band');
+            $id = $this->input->post('id');
+            $existe = 0;
 
-        $data['facturas']=$this->Local->get_register('Facturas');
-        $data['sede']=$this->Local->get_register('Sedes');
-        $data['bool']=$this->input->post('band');
-        $this->load->view('facturas',$data);
+            $sql=$this->Local->getElementWhere('Clientes', 'nombre_cli', 'identificacion_cli', $cliente);
+            if(count($sql)>0){
+                $sql=$this->Local->getElementWhere('Inventario', 'nombre_inv,cantidad_prod_inv,cod_sede_inv', 'cod_prod_inv', $producto);
+                if(count($sql)>0){
+                    foreach ($sql as $key) {
+                        if($key->cod_sede_inv==$sede){
+                            if($key->cantidad_prod_inv==0){
+                                $this->session->set_userdata('success', '<span class="label label-danger">El producto con código '.$producto.' se encuentra agotado en la sede seleccionada</span>');
+                                redirect(base_url() . 'index.php/Admin/facturas');
+                            }
+                            if($cantidad > $key->cantidad_prod_inv){
+                                $this->session->set_userdata('success', '<span class="label label-danger">El producto con código '.$producto.' tiene un cantidad menor a la solicitada en la sede seleccionada</span>');
+                                redirect(base_url() . 'index.php/Admin/facturas');
+                            }
+                            $existe = 1;
+                            break;
+                        }
+                    }
+                    if($existe == 0){
+                        $this->session->set_userdata('success', '<span class="label label-danger">No existe producto con código '.$producto.' en el inventario de la sede seleccionada</span>');
+                        redirect(base_url() . 'index.php/Admin/facturas');
+                    }
+                }else{
+                    $this->session->set_userdata('success', '<span class="label label-danger">No existe producto con código '.$producto.' en el inventario</span>');
+                    redirect(base_url() . 'index.php/Admin/facturas');
+                }
+            }else{
+                $this->session->set_userdata('success', '<span class="label label-danger">No existe cliente con el número de identificación '.$cliente.', debe realizar el ingreso del cliente.</span>');
+                redirect(base_url() . 'index.php/Admin/facturas');
+            }
+
+            if($cantidad <= 0){
+                $this->session->set_userdata('success', '<span class="label label-danger">La cantidad del producto debe ser mayor o igual a cero</span>');
+                redirect(base_url() . 'index.php/Admin/facturas');
+            }
+
+            if($id  == 0){
+                $sql3=$this->Local->get_register3('Inventario', 'cod_prod_inv', $producto, 'cod_sede_inv', $sede);
+                $sql5=$this->Local->get_register2('Clientes', 'identificacion_cli', $cliente);
+                $data = array(
+                    'cod_sede_fact' => $sede,
+                    'fecha_fact' => $fecha =date("Y-m-d")
+                );
+                $sql = $this->Local->add('Facturas', $data);
+                $id_fact = $this->db->insert_id();
+                $this->session->set_userdata('id', $id_fact);
+                $data = array(
+                    'cod_fact_fact_cli' => $id_fact,
+                    'cod_cli_fact_cli' => $sql5[0]->id_cli,
+                    'cod_inv_fact_cli' => $sql3[0]->id_inv,
+                    'cant_prod_fact_cli' => $cantidad
+                );
+                $sql = $this->Local->add('Facturas_Cliente', $data);
+                $data = array(
+                    'cantidad_prod_inv' => $sql3[0]->cantidad_prod_inv - $cantidad,
+                );
+                $sql4 = $this->Local->update('Inventario', $data,'id_inv',$sql3[0]->id_inv);
+            }else{
+                $sql3=$this->Local->get_register3('Inventario', 'cod_prod_inv', $producto, 'cod_sede_inv', $sede);
+                $sql5=$this->Local->get_register2('Clientes', 'identificacion_cli', $cliente);
+                $this->session->set_userdata('id', $id);
+                $data = array(
+                    'cod_fact_fact_cli' => $id,
+                    'cod_cli_fact_cli' => $sql5[0]->id_cli,
+                    'cod_inv_fact_cli' => $sql3[0]->id_inv,
+                    'cant_prod_fact_cli' => $cantidad
+                );
+                $sql = $this->Local->add('Facturas_Cliente', $data);
+
+                $data = array(
+                    'cantidad_prod_inv' => $sql3[0]->cantidad_prod_inv - $cantidad,
+                );
+                $sql4 = $this->Local->update('Inventario', $data,'id_inv',$sql3[0]->id_inv);
+            }
+
+            if ($band == 1) {
+                $sql1 = $this->Local->getElementWhere('Sedes', 'id_sede,nombre_sede', 'id_sede', $sede);
+                $this->session->set_userdata('id_sede', $sql1[0]->id_sede);
+                $this->session->set_userdata('nombre_sede', $sql1[0]->nombre_sede);
+                $sql2 = $this->Local->getElementWhere('Clientes', 'nombre_cli,identificacion_cli', 'identificacion_cli', $cliente);
+                $this->session->set_userdata('ident_cliente', $sql2[0]->identificacion_cli);
+                $this->session->set_userdata('nombre_cliente', $sql2[0]->nombre_cli);
+
+                $sql="SELECT * FROM Facturas
+                      JOIN Facturas_Cliente
+                      ON id_fact = cod_fact_fact_cli
+                      JOIN Clientes
+                      ON cod_cli_fact_cli = id_cli
+                      GROUP BY id_fact";
+                $data['facturas']=$this->Local->get_register_sql($sql);
+                $data['sede'] = $this->Local->get_register('Sedes');
+                $data['bool'] = $this->input->post('band');
+                $this->load->view('facturas', $data);
+            }else{
+                if ($sql and $sql4) {
+                    $this->session->set_userdata('success', '<span class="label label-success">El cliente ha sido guardado con éxito</span>');
+                } else {
+                    $this->session->set_userdata('success', '<span class="label label-danger">El cliente no pudo ser guardado con éxito</span>');
+                }
+                redirect(base_url() . 'index.php/Admin/facturas');
+            }
+
+        }
     }
 
     public function validate_string($str){

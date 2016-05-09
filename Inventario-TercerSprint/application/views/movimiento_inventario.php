@@ -38,6 +38,49 @@ $this->load->view('header');
                 $('#descripcion1').attr('value',obj[0][6]);
             } );
 
+            $('#sede').ready(function(){
+                $('#invisible').empty();
+                var valor=$('#sede').val();
+                $.ajax({
+                    type: "POST",
+                    dataType: 'jsonp',
+                    url:"<?php echo base_url('index.php/Admin/MovSede') ?>",
+                    data: {
+                        sede:valor,
+                    },
+                    success:function(datos){
+                        $('#invisible').prepend('<select name="producto" id="producto" class="form-control"></select>');
+                        $.each(datos, function(indice, valor){
+                            $('#producto').append(new Option(valor.nombre_inv, valor.id_inv, true, true));
+                        });
+                    },
+                    error:function(datos){
+                        alert('error');
+                    }
+                });
+            });
+            $('#sede').change(function(){
+                $('#invisible').empty();
+                var valor=$('#sede').val();
+                $.ajax({
+                    type: "POST",
+                    dataType: 'jsonp',
+                    url:"<?php echo base_url('index.php/Admin/MovSede') ?>",
+                    data: {
+                        sede:valor,
+                    },
+                    success:function(datos){
+                        $('#invisible').prepend('<select name="producto" id="producto" class="form-control"></select>');
+                        $.each(datos, function(indice, valor){
+                            $('#producto').append(new Option(valor.nombre_inv, valor.id_inv, true, true));
+                        });
+                    },
+                    error:function(datos){
+                        alert('error');
+                    }
+                });
+            });
+
         } );
 
     </script>
@@ -136,13 +179,20 @@ $this->load->view('header');
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Producto</label>
+                            <label class="col-sm-3 control-label">Sede</label>
                             <div class="col-sm-9">
-                                <select  type="text" name="producto" class="form-control">
-                                    <?php foreach ($inventario as $key) { ?>
-                                        <option value="<?php echo $key->id_inv ?>"><?php echo $key->nombre_inv; ?></option>
+                                <select  type="text" id="sede" name="sede" class="form-control">
+                                    <?php foreach ($sede as $key) { ?>
+                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
                                     <?php } ?>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Producto</label>
+                            <div class="col-sm-9">
+                                <div id="invisible"></div>
                             </div>
                         </div>
 
@@ -170,17 +220,6 @@ $this->load->view('header');
                             <div class="col-sm-9">
                                 <input type="text" name="descripcion" value="<?php echo set_value('descripcion'); ?>" class="form-control">
                                 <?php echo form_error('descripcion'); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Sede</label>
-                            <div class="col-sm-9">
-                                <select  type="text" name="sede" class="form-control">
-                                    <?php foreach ($sede as $key) { ?>
-                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
-                                    <?php } ?>
-                                </select>
                             </div>
                         </div>
 
