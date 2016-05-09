@@ -94,7 +94,8 @@ $this->load->view('header');
     <div  class="tab-pane active" id="invt">
         <div id="navegador">
             <ul>
-                <li><a id="button" href="#myModal1" class="btn">Agregar</a></li>
+                <li><a id="button" href="#myModal" class="btn">Agregar</a></li>
+                <li><a id="button1" href="#myModal1" class="btn" disabled="disable">Agregar producto a otras sedes</a></li>
                 <li><a id="button2" href="#myModal2" class="btn" disabled="disable">Editar</a></li>
                 <li><a id="button3" href="#myModal3" class="btn" disabled="disable">Eliminar</a></li>
             </ul>
@@ -157,7 +158,7 @@ $this->load->view('header');
             </table>
         <?php } ?>
 
-        <div id="myModal1" class="modalmask">
+        <div id="myModal" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Agregar Producto</h3>
@@ -215,6 +216,7 @@ $this->load->view('header');
                                 <input type="file" name="img" value="<?php echo set_value('img'); ?>">
                                 <label style="font-size: 0.8em;">Solo imagenes PNG y JPG</label>
                                 <?php echo form_error('img'); ?>
+                                <input type="hidden" name="band" value="0">
                             </div>
                         </div>
 
@@ -230,6 +232,104 @@ $this->load->view('header');
                             <label class="col-sm-3 control-label">Valor unitario venta con IVA</label>
                             <div class="col-sm-9">
                                 <input type="text" name="venta" value="<?php echo set_value('venta'); ?>" class="form-control">
+                                <?php echo form_error('venta'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Sede</label>
+                            <div class="col-sm-9">
+                                <select  type="text" name="sede" class="form-control">
+                                    <?php foreach ($sede as $key) { ?>
+                                        <option value="<?php echo $key->id_sede ?>"><?php echo $key->nombre_sede; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
+                            <input type="submit" class="btn btn-danger" value="Guardar">
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="myModal1" class="modalmask">
+            <div class="modalbox rotate">
+                <a href="#close" class="close">X</a>
+                <h3 class="modal-title">Agregar Producto a Otras Bodegas</h3>
+                <br><br>
+                <form class="form-horizontal" action="<?php echo base_url('index.php/inventario/crearInventario')?>" method="post" enctype="multipart/form-data">
+                    <div class="modal-body1">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Código Producto</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="codigo" name="codigo"  readonly="true" value="<?php echo set_value('codigo');?>" class="form-control">
+                                <?php echo form_error('codigo'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Nombre producto</label>
+                            <div class="col-sm-9">
+                                <input type="text"  id="nombre" name="nombre" readonly="true" value="<?php echo set_value('nombre'); ?>" class="form-control">
+                                <?php echo form_error('nombre'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Tipo producto</label>
+                            <div class="col-sm-9">
+                                <select  type="text"  id="tipo" name="tipo" readonly="true" class="form-control">
+                                    <option value="Aseo personal">Aseo personal</option>
+                                    <option value="Limpieza hogar">Limpieza hogar</option>
+                                    <option value="Alimentos congelados">Alimentos congelados</option>
+                                    <option value="Comida para animales">Comida para animales</option>
+                                    <option value="Frutas y verduras">Frutas y verduras</option>
+                                    <option value="Carnes">Carnes</option>
+                                    <option value="Confitería">Confitería</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Licores">Licores</option>
+                                    <option value="Granos">Granos</option>
+                                    <option value="Lacteos y huevos">Lacteos y huevos</option>
+                                </select>
+                                <?php echo form_error('tipo'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">IVA</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="iva" readonly="true" value="0.16" class="form-control">
+                                <?php echo form_error('iva'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Imagen</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="img" name="img" readonly="true">
+                                <?php echo form_error('img'); ?>
+                                <input type="hidden" name="band" value="1">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Valor unitario compra con IVA</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="compra" name="compra" readonly="true" value="<?php echo set_value('compra'); ?>" class="form-control">
+                                <?php echo form_error('compra'); ?>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Valor unitario venta con IVA</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="venta" name="venta" readonly="true" value="<?php echo set_value('venta'); ?>" class="form-control">
                                 <?php echo form_error('venta'); ?>
                             </div>
                         </div>

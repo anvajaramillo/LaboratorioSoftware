@@ -17,7 +17,8 @@ class Admin extends CI_Controller
 
     public function index()
     {
-        $data['inventario']=$this->Local->get_register('Inventario');
+        $data['inventario']=$this->Local->get_register_join2('Inventario','Sedes','cod_sede_inv = id_sede');
+        $data['sede']=$this->Local->get_register('Sedes');
         $this->load->view('inventario',$data);
     }
 
@@ -36,7 +37,6 @@ class Admin extends CI_Controller
         $condicion3='id_sede = cod_sede_inv';
         $data['movimiento']=$this->Local->get_register_join4_select($select,'Inventario','Movimiento',$condicion1,'Proveedores',$condicion2,'Sedes',$condicion3);
         $data['proveedores']=$this->Local->get_register('Proveedores');
-        $data['inventario']=$this->Local->get_register('Inventario');
         $data['sede']=$this->Local->get_register('Sedes');
         $this->load->view('movimiento_inventario',$data);
     }
@@ -48,9 +48,16 @@ class Admin extends CI_Controller
     }
 
     public function facturas(){
-        $data['facturas']=$this->Local->get_register('Facturas');
+        $sql="SELECT * FROM Facturas
+              JOIN Facturas_Cliente
+              ON id_fact = cod_fact_fact_cli
+              JOIN Clientes
+              ON cod_cli_fact_cli = id_cli
+              GROUP BY id_fact";
+        $data['facturas']=$this->Local->get_register_sql($sql);
         $data['sede']=$this->Local->get_register('Sedes');
         $data['bool']=0;
+        $this->session->set_userdata('id', 0);
         $this->load->view('facturas',$data);
     }
 
@@ -59,6 +66,12 @@ class Admin extends CI_Controller
         $data=$this->Local->getElementWhere('Inventario','ruta_imagen_inv','id_inv', $id_invt);
         $img='<img src="'.RUTA_SUB.$data[0]->ruta_imagen_inv.'" width="100%" height="100%" title="producto">';
         echo $img;
+    }
+
+    public function MovSede(){
+        $sede=$_POST['sede'];
+        $data=$this->Local->get_register2('Inventario', 'cod_sede_inv', $sede);
+        echo $_GET['callback']."(".json_encode($data).");";
     }
 
     public function FactClient(){
@@ -76,6 +89,7 @@ class Admin extends CI_Controller
     public function FactPro(){
         $id=$_POST['id'];
         $sede=$_POST['sede'];
+        $existe = 0;
         $sql=$this->Local->getElementWhere('Inventario', 'nombre_inv,cantidad_prod_inv,cod_sede_inv', 'cod_prod_inv', $id);
         if(count($sql)>0){
             foreach ($sql as $key) {
@@ -85,13 +99,15 @@ class Admin extends CI_Controller
                     }else{
                         $datos="El producto con código ".$id." se encuentra agotado";
                     }
+                    $existe = 1;
                     break;
-                }else{
-                    $datos="No existe producto con código ".$id." en el inventario de la sede seleccionada";
                 }
             }
+            if($existe == 0){
+                $datos="No existe producto con código ".$id." en el inventario de la sede seleccionada";
+            }
         }else{
-            $datos="No existe producto con código ".$id." en el inventario de la sede seleccionada";
+            $datos="No existe producto con código ".$id." en el inventario";
         }
 
         echo $datos;

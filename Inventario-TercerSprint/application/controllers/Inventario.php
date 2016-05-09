@@ -22,7 +22,7 @@ class Inventario extends CI_Controller
 
     public function crearInventario()
     {
-        $this->form_validation->set_rules('codigo', 'código producto', 'trim|required|is_natural|is_unique[Inventario.cod_prod_inv]');
+        $this->form_validation->set_rules('codigo', 'código producto', 'trim|required|is_natural');
         $this->form_validation->set_rules('nombre', 'nombre producto', 'trim|required|max_length[44]|callback_validate_string');
         $this->form_validation->set_rules('tipo', 'tipo producto', 'trim|required|max_length[44]|callback_validate_string');
         $this->form_validation->set_rules('iva', 'IVA', 'trim|required|decimal');
@@ -52,6 +52,13 @@ class Inventario extends CI_Controller
             $compra = $this->input->post('compra');
             $venta = $this->input->post('venta');
             $sede = $this->input->post('sede');
+
+            $sql = $this->Local->get_register3('Inventario', 'cod_prod_inv', $codigo, 'cod_sede_inv', $sede);
+            if(count($sql) > 0){
+                $sql1 = $this->Local->get_register2('Sedes', 'id_sede', $sede);
+                $this->session->set_userdata('success', '<span class="label label-danger">Error: el código de producto '.$codigo. ' ya se encuentra registrado en la sede ' .$sql1[0]->nombre_sede.'</span>');
+                redirect(base_url() . 'index.php/Admin/inventario');
+            }
             $data = array(
                 'cod_prod_inv' => $codigo,
                 'nombre_inv' => $nombre,
@@ -76,13 +83,7 @@ class Inventario extends CI_Controller
 
     public function editarInventario()
     {
-        $sql = $this->Local->getElementWhere('Inventario', "cod_prod_inv", 'id_inv', $this->input->post('id1'));
-        if($sql[0]->cod_prod_inv != $this->input->post('codigo1')){
-            $this->form_validation->set_rules('codigo1', 'código producto', 'trim|required|is_natural|is_unique[Inventario.cod_prod_inv]');
-        }
-        else{
-            $this->form_validation->set_rules('codigo1', 'código producto', 'trim|required|is_natural');
-        }
+        $this->form_validation->set_rules('codigo1', 'código producto', 'trim|required|is_natural');
         $this->form_validation->set_rules('nombre1', 'nombre producto', 'trim|required|max_length[44]|callback_validate_string');
         $this->form_validation->set_rules('tipo1', 'tipo producto', 'trim|required|max_length[44]|callback_validate_string');
         $this->form_validation->set_rules('iva1', 'IVA', 'trim|required|decimal');
@@ -121,6 +122,13 @@ class Inventario extends CI_Controller
             $compra = $this->input->post('compra1');
             $venta = $this->input->post('venta1');
             $sede = $this->input->post('sede1');
+
+            $sql = $this->Local->get_register3('Inventario', 'cod_prod_inv', $codigo, 'cod_sede_inv', $sede);
+            if(count($sql) > 0){
+                $sql2 = $this->Local->get_register2('Sedes', 'id_sede', $sede);
+                $this->session->set_userdata('success', '<span class="label label-danger">Error: el código de producto '.$codigo. ' ya se encuentra registrado en la sede ' .$sql2[0]->nombre_sede.'</span>');
+                redirect(base_url() . 'index.php/Admin/inventario');
+            }
             $data = array(
                 'cod_prod_inv' => $codigo,
                 'nombre_inv' => $nombre,
