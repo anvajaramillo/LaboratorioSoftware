@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 define('RUTA','/xampp/htdocs/LaboratorioSoftware/Inventario-TercerSprint/Subidas/');
 define('RUTA_SUB','http://localhost/LaboratorioSoftware/Inventario-TercerSprint/Subidas/');
+define('RUTA_PDF','/xampp/htdocs/LuzAngela/GobEscolar/application/third_party/');
 /*
 |--------------------------------------------------------------------------
 | Base Site URL

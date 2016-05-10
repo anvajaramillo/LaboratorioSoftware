@@ -13,6 +13,7 @@ class Admin extends CI_Controller
         $this->load->database('default');
         $this->load->library('email');
         date_default_timezone_set('America/Bogota');
+        require_once(RUTA_PDF.'class.ezpdf.php');
     }
 
     public function index()
@@ -112,6 +113,110 @@ class Admin extends CI_Controller
 
         echo $datos;
     }
+
+    public function ObtenerItems1(){
+        $id_sede = $_POST['id_sede'];
+        $sql2=$this->Local->get_register2('Sedes','id_sede',$id_sede);
+        $datos='<center>'.$sql2[0]->nombre_empr_sede.'</center>
+                <center>NIT '.$sql2[0]->nit_empr_sede.'</center>
+                <center>regimen '.$sql2[0]->regimen_empr_sede.'</center>
+                <center>sede '.$sql2[0]->nombre_sede.'</center>
+                <center>'.$sql2[0]->direccion_sede.'</center>';
+        echo $datos;
+    }
+
+    public function ObtenerItems2(){
+        $id_fact = $_POST['id_fact'];
+        $id_cli = $_POST['id_cli'];
+        $sql1=$this->Local->get_register2('Facturas','id_fact',$id_fact);
+        $sql2=$this->Local->get_register2('Clientes','identificacion_cli',$id_cli);
+        $datos='<span>factura de venta No. '.$id_fact.'</span>
+                <br>
+                <span>fecha: '.$sql1[0]->fecha_fact.'</span>
+                <br>
+                <span>cliente: '.$sql2[0]->nombre_cli.'</span>
+                <br>
+                <span>identificación: '.$id_cli.'</span>';
+        echo $datos;
+
+    }
+
+    public function ObtenerItems3(){
+        $id_fact = $_POST['id_fact'];
+        $sql1=$this->Local->get_register_join2_where('Facturas_Cliente', 'Inventario', 'id_inv = cod_inv_fact_cli','cod_fact_fact_cli',$id_fact);
+        $datos = '<tbody>
+                 <tr>
+                    <th>&nbsp&nbspCódigo Producto&nbsp&nbsp</th>
+                    <th>&nbsp&nbspNombre Producto&nbsp&nbsp</th>
+                    <th>&nbsp&nbspValor Base&nbsp&nbsp</th>
+                    <th>&nbsp&nbspValor IVA&nbsp&nbsp</th>
+                    <th>&nbsp&nbspValor Compra&nbsp&nbsp</th>
+                 </tr>';
+        $total=0;
+        foreach($sql1 as $key){
+            $compra=$key->valor_venta_con_iva_inv;
+            $iva=$compra*$key->iva_inv;
+            $base=$compra-$iva;
+            $datos=$datos.'<tr>
+                        <td>&nbsp&nbsp'.$key->cod_prod_inv.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$key->nombre_inv.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$base.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$iva.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$compra.'&nbsp&nbsp</td>
+                    </tr>';
+            $total=$total+$compra;
+        }
+        $datos=$datos.'<tr><td>&nbsp&nbsp</td><td>&nbsp&nbsp</td><td>&nbsp&nbsp</td><td>&nbsp&nbsp</td></tr>
+                      <tr>
+                        <td>&nbsp&nbspTotal Compra&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$total.'&nbsp&nbsp</td>
+                      </tr>
+                     </tbody>';
+        echo $datos;
+    }
+
+    public function ObtenerPDF(){
+        $id_fact = $_POST['id_fact'];
+        $id_sede = $_POST['id_sede'];
+        $id_cli = $_POST['ident_cli'];
+        $sql1=$this->Local->get_register2('Sedes','id_sede',$id_sede);
+        $sql2=$this->Local->get_register2('Facturas','id_fact',$id_fact);
+        $sql3=$this->Local->get_register2('Clientes','identificacion_cli',$id_cli);
+        $sql4=$this->Local->get_register_join2_where('Facturas_Cliente', 'Inventario', 'id_inv = cod_inv_fact_cli','cod_fact_fact_cli',$id_fact);
+
+        $pdf = new Cezpdf('LETTER');
+        $pdf->selectFont(RUTA_PDF.'fonts/Helvetica.afm');
+
+        $pdf->ezText($sql1[0]->nombre_empr_sede,16,array('justification'=>'center'));
+        $pdf->ezText("NIT ".$sql1[0]->nit_empr_sede,16,array('justification'=>'center'));
+        $pdf->ezText('Regimen '.$sql1[0]->regimen_empr_sede,16,array('justification'=>'center'));
+        $pdf->ezText('Sede '.$sql1[0]->nombre_sede,16,array('justification'=>'center'));
+        $pdf->ezText($sql1[0]->direccion_sede."\n\n",16,array('justification'=>'center'));
+
+        $pdf->ezText('Factura de venta No. '.$id_fact,14);
+        $pdf->ezText('Fecha: '.$sql2[0]->fecha_fact,14);
+        $pdf->ezText('Cliente: '.$sql3[0]->nombre_cli,14);
+        $pdf->ezText('Identificacion: '.$id_cli."\n\n",14);
+
+        $titles = array('codigo'=>'<b>Código Producto</b>', 'nombre'=>'<b>Nombre Producto</b>', 'base'=>'<b>Valor Base</b>', 'iva'=>'<b>Valor IVA</b>', 'compra'=>'<b>Valor Compra</b>');
+
+        $total=0;
+        foreach($sql4 as $key){
+            $compra=$key->valor_venta_con_iva_inv;
+            $iva=$compra*$key->iva_inv;
+            $base=$compra-$iva;
+            $data[] = array('codigo'=>$key->cod_prod_inv, 'nombre'=>$key->nombre_inv, 'base'=>$base, 'iva'=>$iva, 'compra'=>$compra);
+            $total=$total+$compra;
+        }
+        $data[] = array('codigo'=>' ', 'nombre'=>' ', 'base'=>' ', 'iva'=>' ', 'compra'=>' ');
+        $data[] = array('codigo'=>'Total Compra', 'nombre'=>$total, 'base'=>' ', 'iva'=>' ', 'compra'=>' ');
+        $pdf->ezTable($data,"5",$titles);
+        $output=$pdf->ezOutput();
+        file_put_contents(RUTA.'Archivos/inventario.pdf',$output);
+
+        echo "exito";
+    }
+
 
 }
 ?>

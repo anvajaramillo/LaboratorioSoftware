@@ -34,20 +34,67 @@ $this->load->view('header');
             $('#button2').click( function () {
                 var obj = table.rows('.selected').data();
                 console.log(obj);
-                document.getElementById('id1').value = obj[0][0];
-                $('#identificacion1').attr('value',obj[0][1]);
-                $('#nombre1').attr('value',obj[0][2]);
-                $('#fecha1').attr('value',obj[0][3]);
-                $('#telefono1').attr('value',obj[0][4]);
-                $('#direccion1').val(obj[0][5]);
-                $('#ciudad1').val(obj[0][6]);
+                $.ajax({
+                    type : 'POST',
+                    url : '<?php echo base_url('index.php/Admin/ObtenerItems1')?>',
+                    data : {
+                        id_sede : obj[0][2],
+                    },
+                    success : function(body){
+                        $('#items1').html(body);
+                    },
+                    error : function(body){
+                        alert('error');
+                    }
+                });
+                $.ajax({
+                    type : 'POST',
+                    url : '<?php echo base_url('index.php/Admin/ObtenerItems2')?>',
+                    data : {
+                        id_fact : obj[0][0],
+                        id_cli : obj[0][3],
+                    },
+                    success : function(body){
+                        $('#items2').html(body);
+                    },
+                    error : function(body){
+                        alert('error');
+                    }
+                });
+                $.ajax({
+                    type : 'POST',
+                    url : '<?php echo base_url('index.php/Admin/ObtenerItems3')?>',
+                    data : {
+                        id_fact : obj[0][0],
+                    },
+                    success : function(body){
+                        $('#items3').html(body);
+                    },
+                    error : function(body){
+                        alert('error');
+                    }
+                });
             } );
 
             $('#button3').click( function () {
                 var obj = table.rows('.selected').data();
                 console.log(obj);
-                document.getElementById('id2').value = obj[0][0];
-                document.getElementById('nombre2').innerHTML = obj[0][2];
+                $.ajax({
+                    type : 'POST',
+                    url : '<?php echo base_url('index.php/Admin/ObtenerPDF')?>',
+                    data : {
+                        id_fact : obj[0][0],
+                        id_sede : obj[0][2],
+                        ident_cli : obj[0][3],
+                    },
+                    success : function(body){
+                        var submit=document.getElementById('pdf');
+                        submit.click();
+                    },
+                    error : function(body){
+                        alert('error');
+                    }
+                });
             } );
 
             $('#identificacion').change(function () {
@@ -239,12 +286,15 @@ $this->load->view('header');
 
 <div class="cuerpo container panel-body" id="cuerpo1">
 
+    <a id="pdf" href="#" onclick="window.open('<?php echo RUTA_SUB."Archivos/inventario.pdf" ?>')"></a>
+
     <div  class="tab-pane active" id="fac">
         <div id="navegador">
             <ul>
-                <li><a id="button" href="#myModal1" class="btn">Agregar</a></li>
-                <li><a id="button2" href="#myModal2" class="btn" disabled="disable">Editar</a></li>
-                <li><a id="button3" href="#myModal3" class="btn" disabled="disable">Eliminar</a></li>
+                <li><a id="button" href="#myModal1" class="btn">Generar Factura</a></li>
+                <li><a id="button2" href="#myModal2" class="btn" disabled="disable">Items Factura</a></li>
+                <li><a id="button3" href="#" class="btn" disabled="disable">Descargar PDF</a></li>
+                <li><a id="button4" href="#myModal3" class="btn" disabled="disable">Anular Factura</a></li>
             </ul>
         </div>
 
@@ -400,88 +450,15 @@ $this->load->view('header');
         <div id="myModal2" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Editar Cliente</h3>
+                <h3><p id="items1"></p></h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/cliente/editarCliente')?>" method="post">
-                    <div class="modal-body1">
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Identificación cliente</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="identificacion1" name="identificacion1" value="<?php echo set_value('identificacion1');?>" class="form-control">
-                                <?php echo form_error('identificacion1'); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Nombre cliente</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="nombre1" name="nombre1" value="<?php echo set_value('nombre1');?>" class="form-control">
-                                <?php echo form_error('nombre1'); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Fecha de nacimiento</label>
-                            <div class="col-sm-9">
-                                <input type="date" id="fecha1" name="fecha1" value="<?php echo set_value('fecha1');?>" class="form-control">
-                                <?php echo form_error('fecha1'); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Teléfono</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="telefono1" name="telefono1" value="<?php echo set_value('telefono1');?>" class="form-control">
-                                <?php echo form_error('telefono1'); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Dirección</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="direccion1" name="direccion1" value="<?php echo set_value('direccion1');?>" class="form-control">
-                                <?php echo form_error('direccion1'); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Ciudad</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="ciudad1" name="ciudad1" name="ciudad1" value="<?php echo set_value('ciudad1');?>" class="form-control">
-                                <?php echo form_error('ciudad1'); ?>
-                            </div>
-                        </div>
-
-                        <input type="hidden" id="id1" name="id1">
-
-                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">Cerrar</a></button>
-                            <input type="submit" class="btn btn-danger" value="Guardar">
-                        </div>
-
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div id="myModal3" class="modalmask">
-            <div class="modalbox rotate">
-                <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Eliminar Cliente</h3>
-                <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/cliente/eliminarCliente')?>" method="post">
-                    <div class="modal-body1">
-                        <input type="hidden" id="id2" name="id2">
-                        <p>Desea eliminar el cliente: </p>
-                        <p style="font-weight: bold" id="nombre2"></p>
-                        <br><br>
-                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">No</a></button>
-                            <input type="submit" class="btn btn-danger" name="boton" value="Si">
-                        </div>
-                    </div>
-                </form>
+                <div class="modal-body2">
+                    <h4><p id="items2"></p></h4>
+                    <br><br>
+                    <table class="display" cellspacing="10px" width="100%" style='text-align: center'>
+                        <center><div id="items3"></div></center>
+                    </table>
+                </div>
             </div>
         </div>
 
