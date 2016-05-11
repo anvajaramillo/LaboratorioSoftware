@@ -23,11 +23,13 @@ $this->load->view('header');
                     $(this).removeClass('selected');
                     $('#button2').attr("disabled", true);
                     $('#button3').attr("disabled", true);
+                    $('#button4').attr("disabled", true);
                 }else {
                     table.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                     $('#button2').attr("disabled", false);
                     $('#button3').attr("disabled", false);
+                    $('#button4').attr("disabled", false);
                 }
             } );
 
@@ -36,7 +38,7 @@ $this->load->view('header');
                 console.log(obj);
                 $.ajax({
                     type : 'POST',
-                    url : '<?php echo base_url('index.php/Admin/ObtenerItems1')?>',
+                    url : '<?php echo base_url('index.php/Factura/ObtenerItems1')?>',
                     data : {
                         id_sede : obj[0][2],
                     },
@@ -49,7 +51,7 @@ $this->load->view('header');
                 });
                 $.ajax({
                     type : 'POST',
-                    url : '<?php echo base_url('index.php/Admin/ObtenerItems2')?>',
+                    url : '<?php echo base_url('index.php/Factura/ObtenerItems2')?>',
                     data : {
                         id_fact : obj[0][0],
                         id_cli : obj[0][3],
@@ -63,7 +65,7 @@ $this->load->view('header');
                 });
                 $.ajax({
                     type : 'POST',
-                    url : '<?php echo base_url('index.php/Admin/ObtenerItems3')?>',
+                    url : '<?php echo base_url('index.php/Factura/ObtenerItems3')?>',
                     data : {
                         id_fact : obj[0][0],
                     },
@@ -81,7 +83,7 @@ $this->load->view('header');
                 console.log(obj);
                 $.ajax({
                     type : 'POST',
-                    url : '<?php echo base_url('index.php/Admin/ObtenerPDF')?>',
+                    url : '<?php echo base_url('index.php/Factura/ObtenerPDF')?>',
                     data : {
                         id_fact : obj[0][0],
                         id_sede : obj[0][2],
@@ -95,6 +97,14 @@ $this->load->view('header');
                         alert('error');
                     }
                 });
+            } );
+
+            $('#button4').click( function () {
+                var obj = table.rows('.selected').data();
+                console.log(obj);
+                document.getElementById('id2').value = obj[0][0];
+                document.getElementById('num').innerHTML = obj[0][0];
+                document.getElementById('nombre2').innerHTML = obj[0][3];
             } );
 
             $('#identificacion').change(function () {
@@ -448,7 +458,7 @@ $this->load->view('header');
         </div>
 
         <div id="myModal2" class="modalmask">
-            <div class="modalbox rotate">
+            <div class="modalbox1 rotate">
                 <a href="#close" class="close">X</a>
                 <h3><p id="items1"></p></h3>
                 <br><br>
@@ -459,6 +469,28 @@ $this->load->view('header');
                         <center><div id="items3"></div></center>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <div id="myModal3" class="modalmask">
+            <div class="modalbox rotate">
+                <a href="#close" class="close">X</a>
+                <h3 class="modal-title">Anular Factura</h3>
+                <br><br>
+                <form class="form-horizontal" action="<?php echo base_url('index.php/Factura/anularFactura')?>" method="post">
+                    <div class="modal-body1">
+                        <input type="hidden" id="id2" name="id2">
+                        <p>Desea desea anular la factura número: </p>
+                        <p style="font-weight: bold" id="num"></p>
+                        <p>Que pertenece al cliente con número de identificación: </p>
+                        <p style="font-weight: bold" id="nombre2"></p>
+                        <br><br>
+                        <div class="modal-footer" style="text-align: right; position: relative;top:80px">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><a href="#close">No</a></button>
+                            <input type="submit" class="btn btn-danger" name="boton" value="Si">
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
 
