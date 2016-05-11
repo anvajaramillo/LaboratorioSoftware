@@ -13,6 +13,7 @@ class Factura extends CI_Controller
         $this->load->database('default');
         $this->load->library('email');
         date_default_timezone_set('America/Bogota');
+        require_once(RUTA_PDF.'class.ezpdf.php');
     }
 
     public function index()
@@ -33,9 +34,16 @@ class Factura extends CI_Controller
                                                     ');
         //si no cumple con las validaciones
         if (!$this->form_validation->run()){
-            $data['facturas']=$this->Local->get_register_join3('Facturas', 'Facturas_Cliente', 'id_fact = cod_fact_fact_cli', 'Clientes',  'cod_cli_fact_cli = id_cli');
+            $sql="SELECT * FROM Facturas
+              JOIN Facturas_Cliente
+              ON id_fact = cod_fact_fact_cli
+              JOIN Clientes
+              ON cod_cli_fact_cli = id_cli
+              GROUP BY id_fact";
+            $data['facturas']=$this->Local->get_register_sql($sql);
             $data['sede']=$this->Local->get_register('Sedes');
             $data['bool']=0;
+            $this->session->set_userdata('id', 0);
             $this->load->view('facturas',$data);
             //si cumple con las validaciones
         } else {
@@ -79,7 +87,7 @@ class Factura extends CI_Controller
             }
 
             if($cantidad <= 0){
-                $this->session->set_userdata('success', '<span class="label label-danger">La cantidad del producto debe ser mayor o igual a cero</span>');
+                $this->session->set_userdata('success', '<span class="label label-danger">La cantidad del producto debe ser mayor a cero</span>');
                 redirect(base_url() . 'index.php/Admin/facturas');
             }
 
@@ -105,21 +113,35 @@ class Factura extends CI_Controller
                 );
                 $sql4 = $this->Local->update('Inventario', $data,'id_inv',$sql3[0]->id_inv);
             }else{
-                $sql3=$this->Local->get_register3('Inventario', 'cod_prod_inv', $producto, 'cod_sede_inv', $sede);
-                $sql5=$this->Local->get_register2('Clientes', 'identificacion_cli', $cliente);
-                $this->session->set_userdata('id', $id);
-                $data = array(
-                    'cod_fact_fact_cli' => $id,
-                    'cod_cli_fact_cli' => $sql5[0]->id_cli,
-                    'cod_inv_fact_cli' => $sql3[0]->id_inv,
-                    'cant_prod_fact_cli' => $cantidad
-                );
-                $sql = $this->Local->add('Facturas_Cliente', $data);
+                $con=$this->Local->get_register_join2_where_and('Facturas_Cliente', 'Inventario', 'id_inv = cod_inv_fact_cli','cod_fact_fact_cli',$id,'cod_prod_inv', $producto);
+                if(count($con)>0){
+                    $data = array(
+                        'cant_prod_fact_cli' => $con[0]->cant_prod_fact_cli + $cantidad,
+                    );
+                    $sql4 = $this->Local->update('Facturas_Cliente', $data,'id_fact_cli',$con[0]->id_fact_cli);
+                    $this->session->set_userdata('id', $id);
+                    $sql3 = $this->Local->get_register3('Inventario', 'cod_prod_inv', $producto, 'cod_sede_inv', $sede);
+                    $data = array(
+                        'cantidad_prod_inv' => $sql3[0]->cantidad_prod_inv - $cantidad,
+                    );
+                    $sql4 = $this->Local->update('Inventario', $data, 'id_inv', $sql3[0]->id_inv);
+                }else {
+                    $sql3 = $this->Local->get_register3('Inventario', 'cod_prod_inv', $producto, 'cod_sede_inv', $sede);
+                    $sql5 = $this->Local->get_register2('Clientes', 'identificacion_cli', $cliente);
+                    $this->session->set_userdata('id', $id);
+                    $data = array(
+                        'cod_fact_fact_cli' => $id,
+                        'cod_cli_fact_cli' => $sql5[0]->id_cli,
+                        'cod_inv_fact_cli' => $sql3[0]->id_inv,
+                        'cant_prod_fact_cli' => $cantidad
+                    );
+                    $sql = $this->Local->add('Facturas_Cliente', $data);
 
-                $data = array(
-                    'cantidad_prod_inv' => $sql3[0]->cantidad_prod_inv - $cantidad,
-                );
-                $sql4 = $this->Local->update('Inventario', $data,'id_inv',$sql3[0]->id_inv);
+                    $data = array(
+                        'cantidad_prod_inv' => $sql3[0]->cantidad_prod_inv - $cantidad,
+                    );
+                    $sql4 = $this->Local->update('Inventario', $data, 'id_inv', $sql3[0]->id_inv);
+                }
             }
 
             if ($band == 1) {
@@ -149,6 +171,42 @@ class Factura extends CI_Controller
                 redirect(base_url() . 'index.php/Admin/facturas');
             }
 
+        }
+    }
+
+    public function anularFactura(){
+        $this->form_validation->set_rules('id2', 'id', 'trim|required|numeric');
+        //si no cumple con las validaciones
+        if (!$this->form_validation->run()){
+            $sql="SELECT * FROM Facturas
+              JOIN Facturas_Cliente
+              ON id_fact = cod_fact_fact_cli
+              JOIN Clientes
+              ON cod_cli_fact_cli = id_cli
+              GROUP BY id_fact";
+            $data['facturas']=$this->Local->get_register_sql($sql);
+            $data['sede']=$this->Local->get_register('Sedes');
+            $data['bool']=0;
+            $this->session->set_userdata('id', 0);
+            $this->load->view('facturas',$data);
+            //si cumple con las validaciones
+        } else{
+            $id = $this->input->post('id2');
+            $sql1=$this->Local->get_register_join2_where('Facturas_Cliente', 'Inventario', 'id_inv = cod_inv_fact_cli','cod_fact_fact_cli',$id);
+            foreach ($sql1 as $key) {
+                $data = array('cantidad_prod_inv' => $key->cantidad_prod_inv + $key->cant_prod_fact_cli);
+                $sql2 = $this->Local->update('Inventario', $data, 'id_inv',$key->id_inv);
+                $data = array('id_fact_cli' => $key->id_fact_cli);
+                $sql3 = $this->Local->delete('Facturas_Cliente', $data);
+            }
+            $data = array('id_fact' => $id);
+            $sql4 = $this->Local->delete('Facturas', $data);
+            if ($sql2 and $sql3 and $sql4) {
+                $this->session->set_userdata('success', '<span class="label label-success">La factura ha sido anulada con éxito</span>');
+            } else {
+                $this->session->set_userdata('success', '<span class="label label-success">La factura ha sido anulada con éxito</span>');
+            }
+            redirect(base_url() . 'index.php/Admin/facturas');
         }
     }
 
@@ -187,6 +245,110 @@ class Factura extends CI_Controller
             $this->form_validation->set_message('validate_datetime', 'El campo %s debe tener el formato yyyy-mm-dd HH:MM (Hora Militar)');
             return false;
         }
+    }
+
+    public function ObtenerItems1(){
+        $id_sede = $_POST['id_sede'];
+        $sql2=$this->Local->get_register2('Sedes','id_sede',$id_sede);
+        $datos='<center>'.$sql2[0]->nombre_empr_sede.'</center>
+                <center>NIT '.$sql2[0]->nit_empr_sede.'</center>
+                <center>regimen '.$sql2[0]->regimen_empr_sede.'</center>
+                <center>sede '.$sql2[0]->nombre_sede.'</center>
+                <center>'.$sql2[0]->direccion_sede.'</center>';
+        echo $datos;
+    }
+
+    public function ObtenerItems2(){
+        $id_fact = $_POST['id_fact'];
+        $id_cli = $_POST['id_cli'];
+        $sql1=$this->Local->get_register2('Facturas','id_fact',$id_fact);
+        $sql2=$this->Local->get_register2('Clientes','identificacion_cli',$id_cli);
+        $datos='<center>factura de venta No. '.$id_fact.'</center>
+                <center>fecha: '.$sql1[0]->fecha_fact.'</center>
+                <center>cliente: '.$sql2[0]->nombre_cli.'</center>
+                <center>identificación: '.$id_cli.'</center>';
+        echo $datos;
+
+    }
+
+    public function ObtenerItems3(){
+        $id_fact = $_POST['id_fact'];
+        $sql1=$this->Local->get_register_join2_where('Facturas_Cliente', 'Inventario', 'id_inv = cod_inv_fact_cli','cod_fact_fact_cli',$id_fact);
+        $datos = '<tbody>
+                 <tr>
+                    <th>&nbsp&nbspCódigo Producto&nbsp&nbsp</th>
+                    <th>&nbsp&nbspNombre Producto&nbsp&nbsp</th>
+                    <th>&nbsp&nbspCantidad Producto&nbsp&nbsp</th>
+                    <th>&nbsp&nbspValor Base&nbsp&nbsp</th>
+                    <th>&nbsp&nbspValor IVA&nbsp&nbsp</th>
+                    <th>&nbsp&nbspValor Unitario&nbsp&nbsp</th>
+                    <th>&nbsp&nbspValor Compra&nbsp&nbsp</th>
+                 </tr>';
+        $total=0;
+        foreach($sql1 as $key){
+            $compra=$key->valor_venta_con_iva_inv;
+            $iva=$compra*$key->iva_inv;
+            $base=$compra-$iva;
+            $datos=$datos.'<tr>
+                        <td>&nbsp&nbsp'.$key->cod_prod_inv.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$key->nombre_inv.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$key->cant_prod_fact_cli.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$base.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$iva.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$compra.'&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$compra*$key->cant_prod_fact_cli.'&nbsp&nbsp</td>
+                    </tr>';
+            $total=$total+$compra*$key->cant_prod_fact_cli;
+        }
+        $datos=$datos.'<tr><td>&nbsp&nbsp</td><td>&nbsp&nbsp</td><td>&nbsp&nbsp</td><td>&nbsp&nbsp</td></tr>
+                      <tr>
+                        <td>&nbsp&nbspTotal Compra&nbsp&nbsp</td>
+                        <td>&nbsp&nbsp'.$total.'&nbsp&nbsp</td>
+                      </tr>
+                     </tbody>';
+        echo $datos;
+    }
+
+    public function ObtenerPDF(){
+        $id_fact = $_POST['id_fact'];
+        $id_sede = $_POST['id_sede'];
+        $id_cli = $_POST['ident_cli'];
+        $sql1=$this->Local->get_register2('Sedes','id_sede',$id_sede);
+        $sql2=$this->Local->get_register2('Facturas','id_fact',$id_fact);
+        $sql3=$this->Local->get_register2('Clientes','identificacion_cli',$id_cli);
+        $sql4=$this->Local->get_register_join2_where('Facturas_Cliente', 'Inventario', 'id_inv = cod_inv_fact_cli','cod_fact_fact_cli',$id_fact);
+
+        $pdf = new Cezpdf('LETTER');
+        $pdf->selectFont(RUTA_PDF.'fonts/Helvetica.afm');
+
+        $pdf->ezText($sql1[0]->nombre_empr_sede,16,array('justification'=>'center'));
+        $pdf->ezText("NIT ".$sql1[0]->nit_empr_sede,16,array('justification'=>'center'));
+        $pdf->ezText('Regimen '.$sql1[0]->regimen_empr_sede,16,array('justification'=>'center'));
+        $pdf->ezText('Sede '.$sql1[0]->nombre_sede,16,array('justification'=>'center'));
+        $pdf->ezText($sql1[0]->direccion_sede."\n\n",16,array('justification'=>'center'));
+
+        $pdf->ezText('Factura de venta No. '.$id_fact,14,array('justification'=>'center'));
+        $pdf->ezText('Fecha: '.$sql2[0]->fecha_fact,14,array('justification'=>'center'));
+        $pdf->ezText('Cliente: '.$sql3[0]->nombre_cli,14,array('justification'=>'center'));
+        $pdf->ezText('Identificacion: '.$id_cli."\n\n",14,array('justification'=>'center'));
+
+        $titles = array('codigo'=>'<b>Código Producto</b>', 'nombre'=>'<b>Nombre Producto</b>', 'cantidad'=>'<b>Cantidad Producto</b>','base'=>'<b>Valor Base</b>', 'iva'=>'<b>Valor IVA</b>', 'unitario'=>'<b>Valor Unitario</b>', 'compra'=>'<b>Valor Compra</b>');
+
+        $total=0;
+        foreach($sql4 as $key){
+            $compra=$key->valor_venta_con_iva_inv;
+            $iva=$compra*$key->iva_inv;
+            $base=$compra-$iva;
+            $data[] = array('codigo'=>$key->cod_prod_inv, 'nombre'=>$key->nombre_inv,'cantidad'=>$key->cant_prod_fact_cli, 'base'=>$base, 'iva'=>$iva, 'unitario'=>$compra, 'compra'=>$compra*$key->cant_prod_fact_cli);
+            $total=$total+$compra*$key->cant_prod_fact_cli;
+        }
+        $data[] = array('codigo'=>' ', 'nombre'=>' ', 'base'=>' ', 'iva'=>' ', 'compra'=>' ');
+        $data[] = array('codigo'=>'Total Compra', 'nombre'=>$total, 'base'=>' ', 'iva'=>' ', 'compra'=>' ');
+        $pdf->ezTable($data,"5",$titles);
+        $output=$pdf->ezOutput();
+        file_put_contents(RUTA.'Archivos/inventario.pdf',$output);
+
+        echo "exito";
     }
 
 }
