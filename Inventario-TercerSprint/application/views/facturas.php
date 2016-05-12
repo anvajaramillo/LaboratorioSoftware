@@ -477,7 +477,7 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Anular Factura</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/Factura/anularFactura')?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/Factura/eliminarFactura')?>" method="post">
                     <div class="modal-body1">
                         <input type="hidden" id="id2" name="id2">
                         <p>Desea desea anular la factura número: </p>

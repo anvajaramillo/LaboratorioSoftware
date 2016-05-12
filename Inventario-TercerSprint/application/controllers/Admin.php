@@ -97,7 +97,7 @@ class Admin extends CI_Controller
                     if($key->cantidad_prod_inv>0){
                         $datos=$key->nombre_inv.", Cantidad: ".$key->cantidad_prod_inv;
                     }else{
-                        $datos="El producto con código ".$id." se encuentra agotado";
+                        $datos="El producto con código ".$id." se encuentra agotado en la sede seleccionada";
                     }
                     $existe = 1;
                     break;
