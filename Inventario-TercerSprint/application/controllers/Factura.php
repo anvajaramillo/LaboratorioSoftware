@@ -174,7 +174,7 @@ class Factura extends CI_Controller
         }
     }
 
-    public function anularFactura(){
+    public function eliminarFactura(){
         $this->form_validation->set_rules('id2', 'id', 'trim|required|numeric');
         //si no cumple con las validaciones
         if (!$this->form_validation->run()){
