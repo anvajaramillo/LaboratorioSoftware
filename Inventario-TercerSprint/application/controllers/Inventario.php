@@ -134,13 +134,7 @@ class Inventario extends CI_Controller
 
             $sql = $this->Local->get_register2('Inventario', 'id_inv',$id);
             if($codigo != $sql[0]->cod_prod_inv){
-                $sql1="SELECT * FROM Facturas
-                      JOIN Facturas_Cliente
-                      ON id_fact = cod_fact_fact_cli
-                      JOIN Clientes
-                      ON cod_cli_fact_cli = id_cli
-                      GROUP BY id_fact";
-                $sql1=$this->Local->get_register_sql($sql1);
+                $sql1=$this->Local->get_register3('Inventario', 'cod_prod_inv', $codigo, 'cod_sede_inv', $sede);
                 foreach ($sql1 as $key) {
                     if($key->id_inv == $id){
                         if($codigo == $key->cod_prod_inv){
