@@ -79,6 +79,16 @@ class Admin extends CI_Controller
         }
     }
 
+    public function proveedores()
+    {
+        if($this->session->userdata('is_logued_in') != '1' || $this->session->userdata('perfil') != 'admin'){
+            redirect(base_url().'index.php/Login');
+        }else {
+            $data['proveedores'] = $this->Local->get_register('Proveedores');
+            $this->load->view('proveedores', $data);
+        }
+    }
+
     public function ObtenerRutaImg(){
         $id_invt=$_POST['id_invt'];
         $data=$this->Local->getElementWhere('Inventario','ruta_imagen_inv','id_inv', $id_invt);

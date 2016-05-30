@@ -50,12 +50,10 @@ class Login extends CI_Controller {
                 break;
             case 'cajero':
                 //se llama al controlador empresa index
-                //redirect(base_url().'index.php/Cajero');
-                $this->logout_ci();
+                redirect(base_url().'index.php/Cajero');
                 break;
             default:
-                $data['titulo'] = 'Login con roles de usuario en codeigniter1';
-                $this->load->view('login_view',$data);
+                $this->logout_ci();
                 break;
         }
     }

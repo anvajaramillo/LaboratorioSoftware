@@ -94,12 +94,21 @@ $this->load->view('header');
 <br>
 <div class="container">
     <ul class="nav nav-tabs" >
-        <li><a href='<?php echo base_url('index.php/Login/menu') ?>'>Inicio</a></li>
-        <li class="active"><a href='#invt'>Inventario</a></li>
-        <li><a href='<?php echo base_url('index.php/Admin/movInventario') ?>'>Movimiento Inventario</a></li>
-        <li><a href='<?php echo base_url('index.php/Admin/clientes') ?>'>Clientes</a></li>
-        <li><a href='<?php echo base_url('index.php/Admin/facturas') ?>'>Facturas</a></li>
-        <li><a href='<?php echo base_url('index.php/Login/logout_ci') ?>'>Salir</a></li>
+        <?php if($this->session->userdata('perfil') == 'admin'){ ?>
+            <li><a href='<?php echo base_url('index.php/Login/menu') ?>'>Inicio</a></li>
+            <li class="active"><a href='#invt'>Inventario</a></li>
+            <li><a href='<?php echo base_url('index.php/Admin/movInventario') ?>'>Movimiento Inventario</a></li>
+            <li><a href='<?php echo base_url('index.php/Admin/clientes') ?>'>Clientes</a></li>
+            <li><a href='<?php echo base_url('index.php/Admin/facturas') ?>'>Facturas</a></li>
+            <li><a href='<?php echo base_url('index.php/Admin/proveedores') ?>'>Proveedores</a></li>
+            <li><a href='<?php echo base_url('index.php/Login/logout_ci') ?>'>Salir</a></li>
+        <?php } elseif($this->session->userdata('perfil') == 'cajero'){ ?>
+            <li><a href='<?php echo base_url('index.php/Login/menu') ?>'>Inicio</a></li>
+            <li class="active"><a href='#invt'>Inventario</a></li>
+            <li><a href='<?php echo base_url('index.php/Cajero/clientes') ?>'>Clientes</a></li>
+            <li><a href='<?php echo base_url('index.php/Cajero/facturas') ?>'>Facturas</a></li>
+            <li><a href='<?php echo base_url('index.php/Login/logout_ci') ?>'>Salir</a></li>
+        <?php } ?>
     </ul>
 </div>
 
@@ -108,6 +117,7 @@ $this->load->view('header');
 <div class="cuerpo container panel-body" id="cuerpo1">
 
     <div  class="tab-pane active" id="invt">
+        <?php if($this->session->userdata('perfil') == 'admin'){ ?>
         <div id="navegador">
             <ul>
                 <li><a id="button" href="#myModal" class="btn">Agregar</a></li>
@@ -116,7 +126,7 @@ $this->load->view('header');
                 <li><a id="button3" href="#myModal3" class="btn" disabled="disable">Eliminar</a></li>
             </ul>
         </div>
-
+        <?php } ?>
         <div style="text-align: center">
             <h1>Inventario</h1><?php
             //mostrar mensaje de almacenamiento satisfactorio o no de la bd

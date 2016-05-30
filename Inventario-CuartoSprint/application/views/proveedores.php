@@ -5,7 +5,7 @@ $this->load->view('header');
 <html lang="es">
 <header>
     <title>
-        Clientes
+        Proveedores
     </title>
 
     <script type="text/javascript" class="init">
@@ -14,11 +14,11 @@ $this->load->view('header');
 
             //marca o desmarca las celdas de la Datatable y tambien habilita los botones cuando
             //una celda esta en 'selected'
-            var table = $('#Cliente').DataTable({
+            var table = $('#Proveedor').DataTable({
                 "scrollY": "180",
                 "scrollCollapse" : true
             });
-            $('#Cliente tbody').on( 'click', 'tr', function () {
+            $('#Proveedor tbody').on( 'click', 'tr', function () {
                 if ( $(this).hasClass('selected') ) {
                     $(this).removeClass('selected');
                     $('#button2').attr("disabled", true);
@@ -35,12 +35,11 @@ $this->load->view('header');
                 var obj = table.rows('.selected').data();
                 console.log(obj);
                 document.getElementById('id1').value = obj[0][0];
-                $('#identificacion1').attr('value',obj[0][1]);
+                $('#nit1').attr('value',obj[0][1]);
                 $('#nombre1').attr('value',obj[0][2]);
-                $('#fecha1').attr('value',obj[0][3]);
-                $('#telefono1').attr('value',obj[0][4]);
-                $('#direccion1').val(obj[0][5]);
-                $('#ciudad1').val(obj[0][6]);
+                $('#telefono1').attr('value',obj[0][3]);
+                $('#direccion1').val(obj[0][4]);
+                $('#ciudad1').val(obj[0][5]);
             } );
 
             $('#button3').click( function () {
@@ -63,14 +62,14 @@ $this->load->view('header');
             <li><a href='<?php echo base_url('index.php/Login/menu') ?>'>Inicio</a></li>
             <li><a href='<?php echo base_url('index.php/Admin/inventario') ?>'>Inventario</a></li>
             <li><a href='<?php echo base_url('index.php/Admin/movInventario') ?>'>Movimiento Inventario</a></li>
-            <li class="active"><a href='#cli'>Clientes</a></li>
+            <li><a href='<?php echo base_url('index.php/Admin/clientes') ?>'>Clientes</a></li>
             <li><a href='<?php echo base_url('index.php/Admin/facturas') ?>'>Facturas</a></li>
-            <li><a href='<?php echo base_url('index.php/Admin/proveedores') ?>'>Proveedores</a></li>
+            <li class="active"><a href='#cli'>Proveedores</a></li>
             <li><a href='<?php echo base_url('index.php/Login/logout_ci') ?>'>Salir</a></li>
         <?php } elseif($this->session->userdata('perfil') == 'cajero'){ ?>
             <li><a href='<?php echo base_url('index.php/Login/menu') ?>'>Inicio</a></li>
             <li><a href='<?php echo base_url('index.php/Cajero/inventario') ?>'>Inventario</a></li>
-            <li class="active"><a href='#cli'>Clientes</a></li>
+            <li><a href='<?php echo base_url('index.php/Cajero/clientes') ?>'>Clientes</a></li>
             <li><a href='<?php echo base_url('index.php/Cajero/facturas') ?>'>Facturas</a></li>
             <li><a href='<?php echo base_url('index.php/Login/logout_ci') ?>'>Salir</a></li>
         <?php } ?>
@@ -86,14 +85,12 @@ $this->load->view('header');
             <ul>
                 <li><a id="button" href="#myModal1" class="btn">Agregar</a></li>
                 <li><a id="button2" href="#myModal2" class="btn" disabled="disable">Editar</a></li>
-                <?php if($this->session->userdata('perfil') == 'admin'){ ?>
-                    <li><a id="button3" href="#myModal3" class="btn" disabled="disable">Eliminar</a></li>
-                <?php } ?>
+                <li><a id="button3" href="#myModal3" class="btn" disabled="disable">Eliminar</a></li>
             </ul>
         </div>
 
         <div style="text-align: center">
-            <h1>Clientes</h1><?php
+            <h1>Proveedores</h1><?php
             //mostrar mensaje de almacenamiento satisfactorio o no de la bd
             if(key_exists('success', $this->session->all_userdata())){
                 echo "<h4>".$this->session->userdata('success')."</h4>";
@@ -107,16 +104,15 @@ $this->load->view('header');
             </div>
         <?php } ?>
 
-        <?php if (isset($clientes['error'])) { ?>
+        <?php if (isset($proveedores['error'])) { ?>
             <h2>Ha ocurrido un error en la base de datos</h2>
         <?php } else {	?>
-            <table id="Cliente" class="display" cellspacing="0" width="100%">
+            <table id="Proveedor" class="display" cellspacing="0" width="100%">
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Identificación</th>
+                    <th>NIT</th>
                     <th>Nombre</th>
-                    <th>Fecha de Nacimiento</th>
                     <th>Teléfono</th>
                     <th>Dirección</th>
                     <th>Ciudad</th>
@@ -124,15 +120,14 @@ $this->load->view('header');
                 </thead>
                 <tbody>
                 <?php //se recorre el arreglo por medio de un foreach y se accede a el como un objeto ?>
-                <?php foreach ($clientes as $key) { ?>
+                <?php foreach ($proveedores as $key) { ?>
                     <tr>
-                        <td><?php echo $key->id_cli; ?></td>
-                        <td><?php echo $key->identificacion_cli; ?></td>
-                        <td><?php echo $key->nombre_cli; ?></td>
-                        <td><?php echo $key->fecha_nac_cli; ?></td>
-                        <td><?php echo $key->telefono_cli; ?></td>
-                        <td><?php echo $key->direccion_cli; ?></td>
-                        <td><?php echo $key->ciudad_cli; ?></td>
+                        <td><?php echo $key->id_prov; ?></td>
+                        <td><?php echo $key->nit_prov; ?></td>
+                        <td><?php echo $key->nombre_prov; ?></td>
+                        <td><?php echo $key->telefono_prov; ?></td>
+                        <td><?php echo $key->direccion_prov; ?></td>
+                        <td><?php echo $key->ciudad_prov; ?></td>
                     </tr>
                 <?php }?>
                 </tbody>
@@ -142,32 +137,24 @@ $this->load->view('header');
         <div id="myModal1" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Agregar Cliente</h3>
+                <h3 class="modal-title">Agregar Proveedor</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/cliente/crearCliente')?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/proveedores/crearProveedor')?>" method="post">
                     <div class="modal-body1">
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Identificación cliente</label>
+                            <label class="col-sm-3 control-label">NIT proveedor</label>
                             <div class="col-sm-9">
-                                <input type="text" name="identificacion" value="<?php echo set_value('identificacion');?>" class="form-control">
-                                <?php echo form_error('identificacion'); ?>
+                                <input type="text" name="nit" value="<?php echo set_value('nit');?>" class="form-control">
+                                <?php echo form_error('nit'); ?>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Nombre cliente</label>
+                            <label class="col-sm-3 control-label">Nombre proveedor</label>
                             <div class="col-sm-9">
                                 <input type="text" name="nombre" value="<?php echo set_value('nombre');?>" class="form-control">
                                 <?php echo form_error('nombre'); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Fecha de nacimiento</label>
-                            <div class="col-sm-9">
-                                <input type="date" name="fecha" value="<?php echo set_value('fecha');?>" class="form-control">
-                                <?php echo form_error('fecha'); ?>
                             </div>
                         </div>
 
@@ -208,32 +195,24 @@ $this->load->view('header');
         <div id="myModal2" class="modalmask">
             <div class="modalbox rotate">
                 <a href="#close" class="close">X</a>
-                <h3 class="modal-title">Editar Cliente</h3>
+                <h3 class="modal-title">Editar Proveedor</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/cliente/editarCliente')?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/proveedores/editarProveedor')?>" method="post">
                     <div class="modal-body1">
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Identificación cliente</label>
+                            <label class="col-sm-3 control-label">NIT proveedor</label>
                             <div class="col-sm-9">
-                                <input type="text" id="identificacion1" name="identificacion1" value="<?php echo set_value('identificacion1');?>" class="form-control">
-                                <?php echo form_error('identificacion1'); ?>
+                                <input type="text" id="nit1" name="nit1" value="<?php echo set_value('nit1');?>" class="form-control">
+                                <?php echo form_error('nit1'); ?>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Nombre cliente</label>
+                            <label class="col-sm-3 control-label">Nombre proveedor</label>
                             <div class="col-sm-9">
                                 <input type="text" id="nombre1" name="nombre1" value="<?php echo set_value('nombre1');?>" class="form-control">
                                 <?php echo form_error('nombre1'); ?>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Fecha de nacimiento</label>
-                            <div class="col-sm-9">
-                                <input type="date" id="fecha1" name="fecha1" value="<?php echo set_value('fecha1');?>" class="form-control">
-                                <?php echo form_error('fecha1'); ?>
                             </div>
                         </div>
 
@@ -278,10 +257,10 @@ $this->load->view('header');
                 <a href="#close" class="close">X</a>
                 <h3 class="modal-title">Eliminar Cliente</h3>
                 <br><br>
-                <form class="form-horizontal" action="<?php echo base_url('index.php/cliente/eliminarCliente')?>" method="post">
+                <form class="form-horizontal" action="<?php echo base_url('index.php/proveedores/eliminarProveedor')?>" method="post">
                     <div class="modal-body1">
                         <input type="hidden" id="id2" name="id2">
-                        <p>Desea eliminar el cliente: </p>
+                        <p>Desea eliminar el proveedor: </p>
                         <p style="font-weight: bold" id="nombre2"></p>
                         <br><br>
                         <div class="modal-footer" style="text-align: right; position: relative;top:80px">

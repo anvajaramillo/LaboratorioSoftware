@@ -171,7 +171,18 @@ class Factura extends CI_Controller
                     } else {
                         $this->session->set_userdata('success', '<span class="label label-danger">La factura no puedo ser guardada con éxito</span>');
                     }
-                    redirect(base_url() . 'index.php/Admin/facturas');
+
+                    switch ($this->session->userdata('perfil')) {
+                        case 'admin':
+                            redirect(base_url().'index.php/Admin/facturas');
+                            break;
+                        case 'cajero':
+                            redirect(base_url().'index.php/Cajero/facturas');
+                            break;
+                        default:
+                            redirect(base_url().'index.php/Login');
+                            break;
+                    }
                 }
 
             }
@@ -213,7 +224,18 @@ class Factura extends CI_Controller
                 } else {
                     $this->session->set_userdata('success', '<span class="label label-success">La factura ha sido anulada con éxito</span>');
                 }
-                redirect(base_url() . 'index.php/Admin/facturas');
+
+                switch ($this->session->userdata('perfil')) {
+                    case 'admin':
+                        redirect(base_url().'index.php/Admin/facturas');
+                        break;
+                    case 'cajero':
+                        redirect(base_url().'index.php/Cajero/facturas');
+                        break;
+                    default:
+                        redirect(base_url().'index.php/Login');
+                        break;
+                }
             }
         }
     }
