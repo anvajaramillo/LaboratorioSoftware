@@ -98,12 +98,7 @@ $this->load->view('header');
             <li><a href='<?php echo base_url('index.php/Admin/clientes') ?>'>Clientes</a></li>
             <li><a href='<?php echo base_url('index.php/Admin/facturas') ?>'>Facturas</a></li>
             <li><a href='<?php echo base_url('index.php/Admin/proveedores') ?>'>Proveedores</a></li>
-            <li><a href='<?php echo base_url('index.php/Login/logout_ci') ?>'>Salir</a></li>
-        <?php } elseif($this->session->userdata('perfil') == 'cajero'){ ?>
-            <li><a href='<?php echo base_url('index.php/Login/menu') ?>'>Inicio</a></li>
-            <li><a href='<?php echo base_url('index.php/Cajero/inventario') ?>'>Inventario</a></li>
-            <li><a href='<?php echo base_url('index.php/Cajero/clientes') ?>'>Clientes</a></li>
-            <li><a href='<?php echo base_url('index.php/Cajero/facturas') ?>'>Facturas</a></li>
+            <li><a href='<?php echo base_url('index.php/Admin/consultas') ?>'>Consultas</a></li>
             <li><a href='<?php echo base_url('index.php/Login/logout_ci') ?>'>Salir</a></li>
         <?php } ?>
     </ul>

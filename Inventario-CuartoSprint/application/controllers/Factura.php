@@ -99,7 +99,7 @@ class Factura extends CI_Controller
                     $sql5 = $this->Local->get_register2('Clientes', 'identificacion_cli', $cliente);
                     $data = array(
                         'cod_sede_fact' => $sede,
-                        'fecha_fact' => $fecha = date("Y-m-d")
+                        'fecha_fact' => date("Y-m-d")
                     );
                     $sql = $this->Local->add('Facturas', $data);
                     $id_fact = $this->db->insert_id();
