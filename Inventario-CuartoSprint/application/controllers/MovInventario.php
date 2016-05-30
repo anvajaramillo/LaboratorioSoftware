@@ -97,7 +97,15 @@ class MovInventario extends CI_Controller
                 } else {
                     $this->session->set_userdata('success', '<span class="label label-danger">El movimiento de inventario no pudo ser realizado con éxito</span>');
                 }
-                redirect(base_url() . 'index.php/Admin/movInventario');
+
+                switch ($this->session->userdata('perfil')) {
+                    case 'admin':
+                        redirect(base_url().'index.php/Admin/movInventario');
+                        break;
+                    default:
+                        redirect(base_url().'index.php/Login');
+                        break;
+                }
             }
         }
     }
@@ -136,7 +144,15 @@ class MovInventario extends CI_Controller
                 } else {
                     $this->session->set_userdata('success', '<span class="label label-danger">El movimiento de inventario o no pudo ser actualizado con éxito</span>');
                 }
-                redirect(base_url() . 'index.php/Admin/movInventario');
+
+                switch ($this->session->userdata('perfil')) {
+                    case 'admin':
+                        redirect(base_url().'index.php/Admin/movInventario');
+                        break;
+                    default:
+                        redirect(base_url().'index.php/Login');
+                        break;
+                }
             }
         }
     }

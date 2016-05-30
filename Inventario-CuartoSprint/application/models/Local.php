@@ -19,6 +19,7 @@ class Local extends CI_Model
             $data['is_logued_in'] = true;
             $data['id_usu']=$tmp['id_usu'];
             $data['perfil'] = $tmp['tipo_usu'];
+            $data['sede'] = $tmp['cod_sede_usu'];
             return $data;
         }else{
             $this->session->set_flashdata('usuario_incorrecto','Este usuario no se encuentra registrado o ha ingresado datos incorrectos, vuelvalo a intentarlo');

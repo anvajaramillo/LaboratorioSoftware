@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Cliente extends CI_Controller
+class Proveedores extends CI_Controller
 {
 
     public function __construct()
@@ -20,14 +20,13 @@ class Cliente extends CI_Controller
         null;
     }
 
-    public function crearCliente()
+    public function crearProveedor()
     {
         if($this->session->userdata('perfil') == FALSE || $this->session->userdata('is_logued_in') != 1) {
             redirect(base_url().'index.php/Login');
         }else {
-            $this->form_validation->set_rules('identificacion', 'identificación del cliente', 'trim|required|is_natural|is_unique[Clientes.identificacion_cli]');
-            $this->form_validation->set_rules('nombre', 'nombre del cliente', 'trim|required|max_length[44]|callback_validate_string');
-            $this->form_validation->set_rules('fecha', 'fecha', 'trim|required|callback_validate_date');
+            $this->form_validation->set_rules('nit', 'nit proveedor', 'trim|required|max_length[44]|callback_validate_string');
+            $this->form_validation->set_rules('nombre', 'nombre proveedor', 'trim|required|max_length[44]|callback_validate_string');
             $this->form_validation->set_rules('telefono', 'telefono', 'trim|required|is_natural');
             $this->form_validation->set_rules('direccion', 'direccion', 'trim|required|max_length[44]|callback_validate_string');
             $this->form_validation->set_rules('ciudad', 'ciudad', 'trim|required|max_length[44]|callback_validate_string');
@@ -37,37 +36,32 @@ class Cliente extends CI_Controller
                                                     ');
             //si no cumple con las validaciones
             if (!$this->form_validation->run()) {
-                $data['clientes'] = $this->Local->get_register('Clientes');
-                $this->load->view('clientes', $data);
+                $data['proveedores'] = $this->Local->get_register('Proveedores');
+                $this->load->view('proveedores', $data);
                 //si cumple con las validaciones
             } else {
-                $identificacion = $this->input->post('identificacion');
+                $nit = $this->input->post('nit');
                 $nombre = $this->input->post('nombre');
-                $fecha = $this->input->post('fecha');
                 $telefono = $this->input->post('telefono');
                 $direccion = $this->input->post('direccion');
                 $ciudad = $this->input->post('ciudad');
                 $data = array(
-                    'identificacion_cli' => $identificacion,
-                    'nombre_cli' => $nombre,
-                    'fecha_nac_cli' => $fecha,
-                    'telefono_cli' => $telefono,
-                    'direccion_cli' => $direccion,
-                    'ciudad_cli' => $ciudad
+                    'nit_prov' => $nit,
+                    'nombre_prov' => $nombre,
+                    'telefono_prov' => $telefono,
+                    'direccion_prov' => $direccion,
+                    'ciudad_prov' => $ciudad
                 );
-                $sql = $this->Local->add('Clientes', $data);
+                $sql = $this->Local->add('Proveedores', $data);
                 if ($sql) {
-                    $this->session->set_userdata('success', '<span class="label label-success">El cliente ha sido guardado con éxito</span>');
+                    $this->session->set_userdata('success', '<span class="label label-success">El proveedor ha sido guardado con éxito</span>');
                 } else {
-                    $this->session->set_userdata('success', '<span class="label label-danger">El cliente no pudo ser guardado con éxito</span>');
+                    $this->session->set_userdata('success', '<span class="label label-danger">El proveedor no pudo ser guardado con éxito</span>');
                 }
 
                 switch ($this->session->userdata('perfil')) {
                     case 'admin':
-                        redirect(base_url().'index.php/Admin/clientes');
-                        break;
-                    case 'cajero':
-                        redirect(base_url().'index.php/Cajero/clientes');
+                        redirect(base_url().'index.php/Admin/proveedores');
                         break;
                     default:
                         redirect(base_url().'index.php/Login');
@@ -77,19 +71,13 @@ class Cliente extends CI_Controller
         }
     }
 
-    public function editarCliente()
+    public function editarProveedor()
     {
         if($this->session->userdata('perfil') == FALSE || $this->session->userdata('is_logued_in') != 1) {
             redirect(base_url().'index.php/Login');
         }else {
-            $sql1 = $this->Local->getElementWhere('Clientes', "identificacion_cli", 'id_cli', $this->input->post('id1'));
-            if ($sql1[0]->identificacion_cli != $this->input->post('identificacion1')) {
-                $this->form_validation->set_rules('identificacion1', 'identificación del cliente', 'trim|required|is_natural|is_unique[Clientes.identificacion_cli]');
-            } else {
-                $this->form_validation->set_rules('identificacion1', 'identificación del cliente', 'trim|required|is_natural');
-            }
+            $this->form_validation->set_rules('nit1', 'nit proveedor', 'trim|required|max_length[44]|callback_validate_string');
             $this->form_validation->set_rules('nombre1', 'nombre del cliente', 'trim|required|max_length[44]|callback_validate_string');
-            $this->form_validation->set_rules('fecha1', 'fecha', 'trim|required|callback_validate_date');
             $this->form_validation->set_rules('telefono1', 'telefono', 'trim|required|is_natural');
             $this->form_validation->set_rules('direccion1', 'direccion', 'trim|required|max_length[44]|callback_validate_string');
             $this->form_validation->set_rules('ciudad1', 'ciudad', 'trim|required|max_length[44]|callback_validate_string');
@@ -100,39 +88,34 @@ class Cliente extends CI_Controller
                                                     ');
             //si no cumple con las validaciones
             if (!$this->form_validation->run()) {
-                $data['clientes'] = $this->Local->get_register('Clientes');
-                $this->load->view('clientes', $data);
+                $data['proveedores'] = $this->Local->get_register('Proveedores');
+                $this->load->view('proveedores', $data);
                 //si cumple con las validaciones
             } else {
                 $id = $this->input->post('id1');
-                $identificacion = $this->input->post('identificacion1');
+                $nit = $this->input->post('nit1');
                 $nombre = $this->input->post('nombre1');
-                $fecha = $this->input->post('fecha1');
                 $telefono = $this->input->post('telefono1');
                 $direccion = $this->input->post('direccion1');
                 $ciudad = $this->input->post('ciudad1');
                 $data = array(
-                    'id_cli' => $id,
-                    'identificacion_cli' => $identificacion,
-                    'nombre_cli' => $nombre,
-                    'fecha_nac_cli' => $fecha,
-                    'telefono_cli' => $telefono,
-                    'direccion_cli' => $direccion,
-                    'ciudad_cli' => $ciudad
+                    'id_prov' => $id,
+                    'nit_prov' => $nit,
+                    'nombre_prov' => $nombre,
+                    'telefono_prov' => $telefono,
+                    'direccion_prov' => $direccion,
+                    'ciudad_prov' => $ciudad
                 );
-                $sql2 = $this->Local->update('Clientes', $data, 'id_cli', $id);
+                $sql2 = $this->Local->update('Proveedores', $data, 'id_prov', $id);
                 if ($sql2) {
-                    $this->session->set_userdata('success', '<span class="label label-success">El cliente ha sido actualizado con éxito</span>');
+                    $this->session->set_userdata('success', '<span class="label label-success">El proveedor ha sido actualizado con éxito</span>');
                 } else {
-                    $this->session->set_userdata('success', '<span class="label label-danger">El cliente no pudo ser actualizado con éxito</span>');
+                    $this->session->set_userdata('success', '<span class="label label-danger">El proveedor no pudo ser actualizado con éxito</span>');
                 }
 
                 switch ($this->session->userdata('perfil')) {
                     case 'admin':
-                        redirect(base_url().'index.php/Admin/clientes');
-                        break;
-                    case 'cajero':
-                        redirect(base_url().'index.php/Cajero/clientes');
+                        redirect(base_url().'index.php/Admin/proveedores');
                         break;
                     default:
                         redirect(base_url().'index.php/Login');
@@ -142,7 +125,7 @@ class Cliente extends CI_Controller
         }
     }
 
-    public function eliminarCliente()
+    public function eliminarProveedor()
     {
         if($this->session->userdata('perfil') == FALSE || $this->session->userdata('is_logued_in') != 1) {
             redirect(base_url().'index.php/Login');
@@ -150,25 +133,22 @@ class Cliente extends CI_Controller
             $this->form_validation->set_rules('id2', 'id', 'trim|required|numeric');
             //si no cumple con las validaciones
             if (!$this->form_validation->run()) {
-                $data['clientes'] = $this->Local->get_register('Clientes');
-                $this->load->view('clientes', $data);
+                $data['proveedores'] = $this->Local->get_register('Proveedores');
+                $this->load->view('proveedores', $data);
                 //si cumple con las validaciones
             } else {
                 $id = $this->input->post('id2');
-                $data = array('id_cli' => $id);
-                $sql = $this->Local->delete('Clientes', $data);
+                $data = array('id_prov' => $id);
+                $sql = $this->Local->delete('Proveedores', $data);
                 if ($sql) {
-                    $this->session->set_userdata('success', '<span class="label label-success">El cliente ha sido borrado con éxito</span>');
+                    $this->session->set_userdata('success', '<span class="label label-success">El proveedor ha sido borrado con éxito</span>');
                 } else {
-                    $this->session->set_userdata('success', '<span class="label label-success">El cliente no pudo ser borrado con éxito</span>');
+                    $this->session->set_userdata('success', '<span class="label label-success">El proveedor no pudo ser borrado con éxito</span>');
                 }
 
                 switch ($this->session->userdata('perfil')) {
                     case 'admin':
-                        redirect(base_url().'index.php/Admin/clientes');
-                        break;
-                    case 'cajero':
-                        redirect(base_url().'index.php/Cajero/clientes');
+                        redirect(base_url().'index.php/Admin/proveedores');
                         break;
                     default:
                         redirect(base_url().'index.php/Login');

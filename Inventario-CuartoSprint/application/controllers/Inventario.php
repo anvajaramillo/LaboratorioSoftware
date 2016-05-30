@@ -88,7 +88,18 @@ class Inventario extends CI_Controller
                 } else {
                     $this->session->set_userdata('success', '<span class="label label-danger">El producto no pudo ser guardado con éxito</span>');
                 }
-                redirect(base_url() . 'index.php/Admin/inventario');
+
+                switch ($this->session->userdata('perfil')) {
+                    case 'admin':
+                        redirect(base_url().'index.php/Admin/inventario');
+                        break;
+                    case 'cajero':
+                        redirect(base_url().'index.php/Cajero/inventario');
+                        break;
+                    default:
+                        redirect(base_url().'index.php/Login');
+                        break;
+                }
             }
         }
     }
@@ -165,7 +176,18 @@ class Inventario extends CI_Controller
                 } else {
                     $this->session->set_userdata('success', '<span class="label label-danger">El producto no pudo ser actualizado con éxito</span>');
                 }
-                redirect(base_url() . 'index.php/Admin/inventario');
+
+                switch ($this->session->userdata('perfil')) {
+                    case 'admin':
+                        redirect(base_url().'index.php/Admin/inventario');
+                        break;
+                    case 'cajero':
+                        redirect(base_url().'index.php/Cajero/inventario');
+                        break;
+                    default:
+                        redirect(base_url().'index.php/Login');
+                        break;
+                }
             }
         }
     }
@@ -190,7 +212,18 @@ class Inventario extends CI_Controller
                 } else {
                     $this->session->set_userdata('success', '<span class="label label-success">El producto no pudo ser borrado con éxito</span>');
                 }
-                redirect(base_url() . 'index.php/Admin/inventario');
+
+                switch ($this->session->userdata('perfil')) {
+                    case 'admin':
+                        redirect(base_url().'index.php/Admin/inventario');
+                        break;
+                    case 'cajero':
+                        redirect(base_url().'index.php/Cajero/inventario');
+                        break;
+                    default:
+                        redirect(base_url().'index.php/Login');
+                        break;
+                }
             }
         }
 
