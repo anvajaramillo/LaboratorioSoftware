@@ -325,6 +325,191 @@ class Local extends CI_Model
 
     /**
      * @brief Obtiene registros de varias tablas
+     * @details Produce: SELECT * FROM $tabla1 JOIN $tabla2 ON condicion1 JOIN $tabla3 ON condicion2 GROUP BY $column;
+     *
+     * @param $tabla1 especifica la tabla que va a obtener
+     * @param $tabla2 especifica la tabla que va a obtener los registros cruzados
+     * @param $tabla3 especifica la tabla que va a obtener los registros cruzados
+     * @param $condicion1 compara llaves foráneas
+     * @param $condicion2 compara llaves foráneas
+     * @return $query->result() retorna el resultado en una objeto
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function get_register_join3_group_by($tabla1, $tabla2, $condicion1, $tabla3,  $condicion2, $column) {
+        $this->db->protect_identifiers($tabla1);
+        $this->db->protect_identifiers($tabla2);
+        $this->db->protect_identifiers($tabla3);
+        $this->db->select('*');
+        $this->db->from($tabla1);
+        $this->db->join($tabla2, $condicion1);
+        $this->db->join($tabla3, $condicion2);
+        $this->db->group_by($column);
+        $query = $this->db->get();
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query->result();
+        }
+    }
+
+    /**
+     * @brief Obtiene registros de varias tablas
+     * @details Produce: SELECT * FROM $tabla1 JOIN $tabla2 ON condicion1 JOIN $tabla3 ON condicion2 WHERE $item1 = $item2;
+     *
+     * @param $tabla1 especifica la tabla que va a obtener
+     * @param $tabla2 especifica la tabla que va a obtener los registros cruzados
+     * @param $tabla3 especifica la tabla que va a obtener los registros cruzados
+     * @param $condicion1 compara llaves foráneas
+     * @param $condicion2 compara llaves foráneas
+     * @return $query->result() retorna el resultado en una objeto
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function get_register_join3_where($tabla1, $tabla2, $condicion1, $tabla3,  $condicion2, $item1, $item2) {
+        $this->db->protect_identifiers($tabla1);
+        $this->db->protect_identifiers($tabla2);
+        $this->db->protect_identifiers($tabla3);
+        $this->db->select('*');
+        $this->db->from($tabla1);
+        $this->db->join($tabla2, $condicion1);
+        $this->db->join($tabla3, $condicion2);
+        $this->db->where($item1, $item2);
+        $query = $this->db->get();
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query->result();
+        }
+    }
+
+    /**
+     * @brief Obtiene registros de varias tablas
+     * @details Produce: SELECT * FROM $tabla1 JOIN $tabla2 ON condicion1 JOIN $tabla3 ON condicion2 WHERE $item1 = $item2 GROUP BY $column;
+     *
+     * @param $tabla1 especifica la tabla que va a obtener
+     * @param $tabla2 especifica la tabla que va a obtener los registros cruzados
+     * @param $tabla3 especifica la tabla que va a obtener los registros cruzados
+     * @param $condicion1 compara llaves foráneas
+     * @param $condicion2 compara llaves foráneas
+     * @return $query->result() retorna el resultado en una objeto
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function get_register_join3_where_group_by($tabla1, $tabla2, $condicion1, $tabla3,  $condicion2, $item1, $item2, $column) {
+        $this->db->protect_identifiers($tabla1);
+        $this->db->protect_identifiers($tabla2);
+        $this->db->protect_identifiers($tabla3);
+        $this->db->select('*');
+        $this->db->from($tabla1);
+        $this->db->join($tabla2, $condicion1);
+        $this->db->join($tabla3, $condicion2);
+        $this->db->where($item1, $item2);
+        $this->db->group_by($column);
+        $query = $this->db->get();
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query->result();
+        }
+    }
+
+    /**
+     * @brief Obtiene registros de varias tablas
+     * @details Produce: SELECT * FROM $tabla1 JOIN $tabla2 ON condicion1 JOIN $tabla3 ON condicion2 WHERE $item1 = $item2 ORDER BY $column $form;
+     *
+     * @param $tabla1 especifica la tabla que va a obtener
+     * @param $tabla2 especifica la tabla que va a obtener los registros cruzados
+     * @param $tabla3 especifica la tabla que va a obtener los registros cruzados
+     * @param $condicion1 compara llaves foráneas
+     * @param $condicion2 compara llaves foráneas
+     * @return $query->result() retorna el resultado en una objeto
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function get_register_join3_where_order_by($tabla1, $tabla2, $condicion1, $tabla3,  $condicion2, $item1, $item2, $column, $form) {
+        $this->db->protect_identifiers($tabla1);
+        $this->db->protect_identifiers($tabla2);
+        $this->db->protect_identifiers($tabla3);
+        $this->db->select('*');
+        $this->db->from($tabla1);
+        $this->db->join($tabla2, $condicion1);
+        $this->db->join($tabla3, $condicion2);
+        $this->db->where($item1, $item2);
+        $this->db->order_by($column, $form);
+        $query = $this->db->get();
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query->result();
+        }
+    }
+
+    /**
+     * @brief Obtiene registros de varias tablas
+     * @details Produce: SELECT * FROM $tabla1 JOIN $tabla2 ON condicion1 JOIN $tabla3 ON condicion2 WHERE $item1 = $item2 AND $item3 = $item4;
+     *
+     * @param $tabla1 especifica la tabla que va a obtener
+     * @param $tabla2 especifica la tabla que va a obtener los registros cruzados
+     * @param $tabla3 especifica la tabla que va a obtener los registros cruzados
+     * @param $condicion1 compara llaves foráneas
+     * @param $condicion2 compara llaves foráneas
+     * @return $query->result() retorna el resultado en una objeto
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function get_register_join3_where_and($tabla1, $tabla2, $condicion1, $tabla3,  $condicion2, $item1, $item2, $item3, $item4) {
+        $this->db->protect_identifiers($tabla1);
+        $this->db->protect_identifiers($tabla2);
+        $this->db->protect_identifiers($tabla3);
+        $this->db->select('*');
+        $this->db->from($tabla1);
+        $this->db->join($tabla2, $condicion1);
+        $this->db->join($tabla3, $condicion2);
+        $this->db->where($item1, $item2);
+        $this->db->where($item3, $item4);
+        $query = $this->db->get();
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query->result();
+        }
+    }
+
+    /**
+     * @brief Obtiene registros de varias tablas
+     * @details Produce: SELECT * FROM $tabla1 JOIN $tabla2 ON condicion1 JOIN $tabla3 ON condicion2 WHERE $item1 = $item2 AND $item2 = $item4 ORDER BY $column $form;
+     *
+     * @param $tabla1 especifica la tabla que va a obtener
+     * @param $tabla2 especifica la tabla que va a obtener los registros cruzados
+     * @param $tabla3 especifica la tabla que va a obtener los registros cruzados
+     * @param $condicion1 compara llaves foráneas
+     * @param $condicion2 compara llaves foráneas
+     * @return $query->result() retorna el resultado en una objeto
+     * @return $data retorna un error si la consulta no tuvo exito
+     */
+    function get_register_join3_where_and_order_by($tabla1, $tabla2, $condicion1, $tabla3,  $condicion2, $item1, $item2, $item3, $item4, $column, $form) {
+        $this->db->protect_identifiers($tabla1);
+        $this->db->protect_identifiers($tabla2);
+        $this->db->protect_identifiers($tabla3);
+        $this->db->select('*');
+        $this->db->from($tabla1);
+        $this->db->join($tabla2, $condicion1);
+        $this->db->join($tabla3, $condicion2);
+        $this->db->where($item1, $item2);
+        $this->db->where($item3, $item4);
+        $this->db->order_by($column, $form);
+        $query = $this->db->get();
+        if(!$query){
+            $data['error'] = $this->db->_error_message();
+            return $data;
+        }else{
+            return $query->result();
+        }
+    }
+
+    /**
+     * @brief Obtiene registros de varias tablas
      * @details Produce: SELECT $select FROM $tabla1 JOIN $tabla2 ON condicion1 JOIN $tabla3 ON condicion2;
      *
      * @param $select los campos que va a seleccionar

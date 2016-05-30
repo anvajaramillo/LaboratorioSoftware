@@ -65,13 +65,7 @@ class Admin extends CI_Controller
         if($this->session->userdata('is_logued_in') != '1' || $this->session->userdata('perfil') != 'admin'){
             redirect(base_url().'index.php/Login');
         }else {
-            $sql = "SELECT * FROM Facturas
-              JOIN Facturas_Cliente
-              ON id_fact = cod_fact_fact_cli
-              JOIN Clientes
-              ON cod_cli_fact_cli = id_cli
-              GROUP BY id_fact";
-            $data['facturas'] = $this->Local->get_register_sql($sql);
+            $data['facturas'] = $this->Local->get_register_join3_group_by('Facturas', 'Facturas_Cliente', 'id_fact = cod_fact_fact_cli', 'Clientes',  'cod_cli_fact_cli = id_cli', 'id_fact');
             $data['sede'] = $this->Local->get_register('Sedes');
             $data['bool'] = 0;
             $this->session->set_userdata('id', 0);
@@ -86,6 +80,17 @@ class Admin extends CI_Controller
         }else {
             $data['proveedores'] = $this->Local->get_register('Proveedores');
             $this->load->view('proveedores', $data);
+        }
+    }
+
+    public function consultas(){
+        if($this->session->userdata('is_logued_in') != '1' || $this->session->userdata('perfil') != 'admin'){
+            redirect(base_url().'index.php/Login');
+        }else {
+            $fecha = date("Y-m-d");
+            $data['fecha']=$fecha;
+            $data['consultas']=$this->Local->get_register_join3_where_order_by('Facturas', 'Facturas_Cliente', 'id_fact = cod_fact_fact_cli', 'Inventario',  'cod_inv_fact_cli = id_inv', 'fecha_fact', $fecha, 'id_fact', 'DESC');
+            $this->load->view('consultas', $data);
         }
     }
 

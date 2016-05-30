@@ -178,6 +178,45 @@ class Cliente extends CI_Controller
         }
     }
 
+    public function historicoCliente(){
+        if($this->session->userdata('perfil') == FALSE || $this->session->userdata('is_logued_in') != 1) {
+            redirect(base_url().'index.php/Login');
+        }else {
+            $this->form_validation->set_rules('id3', 'id', 'trim|required|numeric');
+            //si no cumple con las validaciones
+            if (!$this->form_validation->run()) {
+                $data['clientes'] = $this->Local->get_register('Clientes');
+                $this->load->view('clientes', $data);
+                //si cumple con las validaciones
+            } else {
+                $id = $this->input->post('id3');
+                if($this->session->userdata('perfil') == 'admin') {
+                    $sql = "SELECT * FROM Facturas
+                      JOIN Facturas_Cliente
+                      ON id_fact = cod_fact_fact_cli
+                      JOIN Clientes
+                      ON cod_cli_fact_cli = id_cli
+                      WHERE id_cli = " . $id . "
+                      GROUP BY id_fact";
+                }else{
+                    $sql = "SELECT * FROM Facturas
+                      JOIN Facturas_Cliente
+                      ON id_fact = cod_fact_fact_cli
+                      JOIN Clientes
+                      ON cod_cli_fact_cli = id_cli
+                      WHERE id_cli = " . $id . "
+                      AND cod_sede_fact = ".$this->session->userdata('sede')."
+                      GROUP BY id_fact";
+                }
+                $data['facturas'] = $this->Local->get_register_sql($sql);
+                $data['sede'] = $this->Local->get_register('Sedes');
+                $data['bool'] = 0;
+                $this->session->set_userdata('id', 0);
+                $this->load->view('facturas', $data);
+            }
+        }
+    }
+
     public function validate_string($str){
         if(preg_match('/^[\w\s_\-áéíóúñ\/\(\)]*$/',$str)){
             return TRUE;

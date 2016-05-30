@@ -23,11 +23,13 @@ $this->load->view('header');
                     $(this).removeClass('selected');
                     $('#button2').attr("disabled", true);
                     $('#button3').attr("disabled", true);
+                    $('#button4').attr("disabled", true);
                 }else {
                     table.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                     $('#button2').attr("disabled", false);
                     $('#button3').attr("disabled", false);
+                    $('#button4').attr("disabled", false);
                 }
             } );
 
@@ -50,6 +52,14 @@ $this->load->view('header');
                 document.getElementById('nombre2').innerHTML = obj[0][2];
             } );
 
+            $('#button4').click( function () {
+                var obj = table.rows('.selected').data();
+                console.log(obj);
+                document.getElementById('id3').value = obj[0][0];
+                var submit=document.getElementById('button5');
+                submit.click();
+            } );
+
         } );
 
     </script>
@@ -66,12 +76,14 @@ $this->load->view('header');
             <li class="active"><a href='#cli'>Clientes</a></li>
             <li><a href='<?php echo base_url('index.php/Admin/facturas') ?>'>Facturas</a></li>
             <li><a href='<?php echo base_url('index.php/Admin/proveedores') ?>'>Proveedores</a></li>
+            <li><a href='<?php echo base_url('index.php/Admin/consultas') ?>'>Consultas</a></li>
             <li><a href='<?php echo base_url('index.php/Login/logout_ci') ?>'>Salir</a></li>
         <?php } elseif($this->session->userdata('perfil') == 'cajero'){ ?>
             <li><a href='<?php echo base_url('index.php/Login/menu') ?>'>Inicio</a></li>
             <li><a href='<?php echo base_url('index.php/Cajero/inventario') ?>'>Inventario</a></li>
             <li class="active"><a href='#cli'>Clientes</a></li>
             <li><a href='<?php echo base_url('index.php/Cajero/facturas') ?>'>Facturas</a></li>
+            <li><a href='<?php echo base_url('index.php/Cajero/consultas') ?>'>Consultas</a></li>
             <li><a href='<?php echo base_url('index.php/Login/logout_ci') ?>'>Salir</a></li>
         <?php } ?>
     </ul>
@@ -89,6 +101,7 @@ $this->load->view('header');
                 <?php if($this->session->userdata('perfil') == 'admin'){ ?>
                     <li><a id="button3" href="#myModal3" class="btn" disabled="disable">Eliminar</a></li>
                 <?php } ?>
+                <li><a id="button4" href="#" class="btn" disabled="disable">Histórico de Compras</a></li>
             </ul>
         </div>
 
@@ -292,6 +305,11 @@ $this->load->view('header');
                 </form>
             </div>
         </div>
+
+        <form class="form-horizontal" action="<?php echo base_url('index.php/cliente/historicoCliente')?>" method="post">
+            <input type="hidden" id="id3" name="id3">
+            <input type="submit" id="button5" class="btn btn-danger" name="boton">
+        </form>
 
     </div>
 </div>
