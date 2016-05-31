@@ -22,7 +22,7 @@ class Local extends CI_Model
             $data['sede'] = $tmp['cod_sede_usu'];
             return $data;
         }else{
-            $this->session->set_flashdata('usuario_incorrecto','Este usuario no se encuentra registrado o ha ingresado datos incorrectos, vuelvalo a intentarlo');
+            $this->session->set_flashdata('usuario_incorrecto','El usuario no se encuentra registrado o ha ingresado datos incorrectos, vuelva a intentarlo');
             redirect(base_url().'index.php/Login','refresh');
         }
 
