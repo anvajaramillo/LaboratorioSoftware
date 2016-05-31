@@ -308,7 +308,7 @@ $this->load->view('header');
 
         <form class="form-horizontal" action="<?php echo base_url('index.php/cliente/historicoCliente')?>" method="post">
             <input type="hidden" id="id3" name="id3">
-            <input type="submit" id="button5" class="btn btn-danger" name="boton">
+            <input type="submit" id="button5" style="display:none">
         </form>
 
     </div>
