@@ -23,15 +23,21 @@ class Login extends CI_Controller {
     {
         $usr  = $this->input->post('usr');
         $pass = $this->input->post('pass');
-        $sql=$this->Local->getElementWhere('Usuarios','contrasena_usu','usuario_usu',$usr);
+        $sql=$this->Local->getElementWhere('Usuarios','contrasena_usu,usuario_usu','usuario_usu',$usr);
         if($sql){
-            if($sql[0]->contrasena_usu == $pass){
-                $check=$this->Local->select_login($usr,$pass);
+            if($sql[0]->usuario_usu == $usr){
+                if($sql[0]->contrasena_usu == $pass){
+                    $check=$this->Local->select_login($usr,$pass);
+                }else{
+                    $data['error_clave']=1;                      //activa el mensaje diciendo que la contraseña es incorrecta
+                    $this->load->view('acceso',$data);
+                    $check=false;
+                }
             }else{
-                $data['error_clave']=1;                      //activa el mensaje diciendo que la contraseña es incorrecta
-                $this->load->view('acceso',$data);
-                $check=false;
+                $this->session->set_flashdata('usuario_incorrecto','El usuario no se encuentra registrado o ha ingresado datos incorrectos, vuelva a intentarlo');
+                redirect(base_url().'index.php/Login','refresh');
             }
+
         }else{
             $check=$this->Local->select_login($usr,$pass);          //activa mansaje diciendo que usuario inválido
         }
